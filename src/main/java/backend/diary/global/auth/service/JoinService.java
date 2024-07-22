@@ -4,6 +4,8 @@ import backend.diary.domain.user.entity.User;
 import backend.diary.domain.user.entity.UserRole;
 import backend.diary.domain.user.entity.repository.UserRepository;
 import backend.diary.global.auth.dto.JoinRequest;
+import backend.diary.global.auth.exception.DuplicationNicknameException;
+import backend.diary.global.auth.exception.DuplicationUsernameException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,13 +37,13 @@ public class JoinService {
 
     private void CheckDuplicationUsername(String username) {
         if(userRepository.existsByUsername(username)){
-            throw new RuntimeException();
+            throw new DuplicationUsernameException();
         }
     }
 
     private void CheckDuplicationNickname(String nickname) {
         if(userRepository.existsByNickname(nickname)){
-            throw new RuntimeException();
+            throw new DuplicationNicknameException();
         }
     }
 }

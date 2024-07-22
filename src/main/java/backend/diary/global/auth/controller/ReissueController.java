@@ -3,8 +3,9 @@ package backend.diary.global.auth.controller;
 import backend.diary.domain.user.entity.UserRole;
 import backend.diary.global.auth.entity.RefreshEntity;
 import backend.diary.global.auth.entity.repository.RefreshRepository;
+import backend.diary.global.auth.exception.CustomJwtException;
+import backend.diary.global.auth.exception.RefreshTokenNullException;
 import backend.diary.global.auth.jwt.JWTUtil;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,24 +34,21 @@ public class ReissueController {
         }
 
         if(refresh == null) {
-            return new ResponseEntity<>("refresh token null", HttpStatus.BAD_REQUEST);
+            throw new RefreshTokenNullException();
         }
 
-        try{
-            jwtUtil.isExpired(refresh);
-        }catch(ExpiredJwtException e){
-            System.out.println("access Token expired Exception!");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        if(!jwtUtil.validationToken(refresh)){
+            throw new CustomJwtException();
         }
 
         String category = jwtUtil.getCategory(refresh);
 
         if(!category.equals("refresh")){
-            return new ResponseEntity<>("refresh token is invalid", HttpStatus.BAD_REQUEST);
+            throw new CustomJwtException("리프레쉬 토큰이 아닙니다.");
         }
 
         if(!refreshRepository.existsByRefreshToken(refresh)){
-            return new ResponseEntity<>("refresh token doesn't exist", HttpStatus.BAD_REQUEST);
+            throw new CustomJwtException("저장되지 않은 리프레쉬 토큰입니다.");
         }
 
         String username = jwtUtil.getUsername(refresh);

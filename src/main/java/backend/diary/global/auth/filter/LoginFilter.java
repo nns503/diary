@@ -5,6 +5,7 @@
     import backend.diary.global.auth.entity.RefreshEntity;
     import backend.diary.global.auth.entity.repository.RefreshRepository;
     import backend.diary.global.auth.jwt.JWTUtil;
+    import backend.diary.global.utill.ResponseUtil;
     import jakarta.servlet.FilterChain;
     import jakarta.servlet.ServletException;
     import jakarta.servlet.http.Cookie;
@@ -21,7 +22,6 @@
 
     import java.io.IOException;
     import java.util.Collection;
-    import java.util.Date;
     import java.util.Iterator;
 
     @RequiredArgsConstructor
@@ -81,8 +81,7 @@
 
         @Override
         protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            // 차후 수정
+            ResponseUtil.writeJsonResponse(response, HttpStatus.NOT_FOUND, "아이디 혹은 비밀번호를 찾을 수 없습니다.");
         }
 
     }

@@ -1,8 +1,9 @@
 package backend.diary.global.auth.filter;
 
 import backend.diary.global.auth.entity.repository.RefreshRepository;
+import backend.diary.global.auth.exception.CustomJwtException;
+import backend.diary.global.auth.exception.RefreshTokenNullException;
 import backend.diary.global.auth.jwt.JWTUtil;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -48,26 +49,20 @@ public class CustomLogoutFilter extends GenericFilterBean {
         }
 
         if(refresh == null) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            throw new RefreshTokenNullException();
         }
 
-        try{
-            jwtUtil.isExpired(refresh);
-        }catch (ExpiredJwtException e){
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
+        if(!jwtUtil.validationToken(refresh)){
+            throw new CustomJwtException();
         }
 
         String category = jwtUtil.getCategory(refresh);
         if (!category.equals("refresh")) {
-            return ;
+            throw new CustomJwtException("리프레쉬 토큰이 아닙니다.");
         }
 
-        Boolean isExist = refreshRepository.existsByRefreshToken(refresh);
-        if (!isExist) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return ;
+        if (!refreshRepository.existsByRefreshToken(refresh)) {
+            throw new CustomJwtException("저장되지 않은 리프레쉬 토큰입니다.");
         }
 
         refreshRepository.deleteByRefreshToken(refresh);

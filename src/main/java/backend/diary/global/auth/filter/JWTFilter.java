@@ -1,9 +1,8 @@
 package backend.diary.global.auth.filter;
 
 import backend.diary.domain.user.entity.User;
-import backend.diary.domain.user.entity.UserRole;
+import backend.diary.global.auth.exception.CustomJwtException;
 import backend.diary.global.auth.jwt.JWTUtil;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,25 +29,18 @@ public class JWTFilter extends OncePerRequestFilter {
         if(authorization == null || !authorization.startsWith("Bearer ")) {
             // 인증이 필요 없는 요청일 수 있으니 다음으로 넘김
             filterChain.doFilter(request, response);
-            System.out.println("Access Token is NOT!");
             return;
         }
         String accessToken = authorization.substring(7);
 
-        try{
-            jwtUtil.isExpired(accessToken);
-        }catch(ExpiredJwtException e){
-            System.out.println("access Token expired Exception!");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
+        if(!jwtUtil.validationToken(accessToken)){
+            throw new CustomJwtException();
         }
 
         String category = jwtUtil.getCategory(accessToken);
 
         if(!category.equals("access")) {
-            System.out.println("access Token invalid!");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
+            throw new CustomJwtException("Access Token이 아닙니다.");
         }
 
         String username = jwtUtil.getUsername(accessToken);

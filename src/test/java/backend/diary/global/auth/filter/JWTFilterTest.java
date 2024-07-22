@@ -33,7 +33,7 @@ class JWTFilterTest {
     }
 
     /*
-    리프레쉬 토큰의 카테고리가 access가 아님
+    리프레쉬 토큰의 카테고리가 access 가 아님
      */
     @Test
     void AccessToken_카테고리_access_X(){

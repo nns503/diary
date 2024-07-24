@@ -25,8 +25,8 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         );
     }
 
-    @ExceptionHandler(UnAuthorizationException.class)
-    public ResponseEntity<ErrorResult> handleDefaultException(UnAuthorizationException e) {
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResult> handleDefaultException(UnauthorizedException e) {
         return new ResponseEntity<>(
                 new ErrorResult("401_UNAUTHORIZED", e.getMessage()), HttpStatus.UNAUTHORIZED
         );

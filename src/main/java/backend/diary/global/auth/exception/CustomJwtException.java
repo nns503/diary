@@ -1,8 +1,8 @@
 package backend.diary.global.auth.exception;
 
-import backend.diary.global.exception.UnAuthorizationException;
+import backend.diary.global.exception.UnauthorizedException;
 
-public class CustomJwtException extends UnAuthorizationException {
+public class CustomJwtException extends UnauthorizedException {
 
     private static final String DEFAULT_MESSAGE = "JWT 토큰 인증이 실패하였습니다.";
 

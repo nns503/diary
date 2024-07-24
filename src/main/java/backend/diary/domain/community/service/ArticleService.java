@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -25,6 +27,7 @@ public class ArticleService {
                 orElseThrow(NotFoundUserException::new);
 
         Article article = Article.builder()
+                .author(user.getNickname())
                 .title(request.title())
                 .content(request.content())
                 .filePath(request.filePath())
@@ -58,6 +61,18 @@ public class ArticleService {
         Article updatedArticle = articleRepository.save(findArticle);
 
         return new UpdateArticleResponse(updatedArticle.getId());
+    }
+
+    public List<GetArticlesResponse> getArticles() {
+        return articleRepository.findAllByOrderByCreatedAtDesc().stream()
+                .map(GetArticlesResponse::convertTo)
+                .toList();
+    }
+
+    public GetArticleResponse getArticle(Long articleId) {
+        Article findArticle = articleRepository.findById(articleId)
+                .orElseThrow(NotFoundArticleException::new);
+        return GetArticleResponse.convertTo(findArticle);
     }
 
     private void validateArticleAuthor(Long userId, Long findUserId) {

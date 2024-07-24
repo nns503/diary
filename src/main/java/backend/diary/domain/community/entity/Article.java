@@ -19,7 +19,11 @@ public class Article extends BaseTimeEntity {
     @GeneratedValue
     private Long id;
 
-        @NotNull
+    @NotNull
+    @Column(name = "author", nullable = false)
+    private String author;
+
+    @NotNull
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -39,7 +43,8 @@ public class Article extends BaseTimeEntity {
     private Boolean isDeleted;
 
     @Builder
-    public Article(String title, String content, String filePath, User user, Boolean isDeleted) {
+    public Article(String author, String title, String content, String filePath, User user, Boolean isDeleted) {
+        this.author = author;
         this.title = title;
         this.content = content;
         this.filePath = filePath;

@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/article")
@@ -42,6 +44,21 @@ public class ArticleController {
             @AuthenticationPrincipal User user
     ){
         UpdateArticleResponse response = articleService.updateArticle(articleId, request, user.getId());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<GetArticlesResponse>> getArticles(
+    ){
+        List<GetArticlesResponse> response = articleService.getArticles();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{articleId}")
+    public ResponseEntity<GetArticleResponse> getArticle(
+            @PathVariable Long articleId
+    ){
+        GetArticleResponse response = articleService.getArticle(articleId);
         return ResponseEntity.ok(response);
     }
 }

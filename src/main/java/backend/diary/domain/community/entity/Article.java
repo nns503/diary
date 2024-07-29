@@ -43,7 +43,8 @@ public class Article extends BaseTimeEntity {
     private Boolean isDeleted;
 
     @Builder
-    public Article(String author, String title, String content, String filePath, User user, Boolean isDeleted) {
+    public Article(Long id, String author, String title, String content, String filePath, User user, Boolean isDeleted) {
+        this.id = id;
         this.author = author;
         this.title = title;
         this.content = content;

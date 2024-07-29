@@ -1,6 +1,9 @@
 package backend.diary.domain.community.dto;
 
 public record CreateArticleResponse(
-        Long ArticleId
+        Long articleId,
+        String title,
+        String content,
+        String filePath
 ) {
 }

@@ -36,7 +36,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     private UserRole role;
 
     @Builder
-    public User(String nickname, String username, String password, UserRole role) {
+    public User(Long id, String nickname, String username, String password, UserRole role) {
+        this.id = id;
         this.nickname = nickname;
         this.username = username;
         this.password = password;

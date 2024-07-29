@@ -1,14 +1,15 @@
 package backend.diary.domain.community.controller;
 
-import backend.diary.domain.community.dto.*;
+import backend.diary.domain.community.dto.CreateArticleRequest;
+import backend.diary.domain.community.dto.CreateArticleResponse;
+import backend.diary.domain.community.dto.UpdateArticleRequest;
+import backend.diary.domain.community.dto.UpdateArticleResponse;
 import backend.diary.domain.community.service.ArticleService;
 import backend.diary.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -44,21 +45,6 @@ public class ArticleController {
             @AuthenticationPrincipal User user
     ){
         UpdateArticleResponse response = articleService.updateArticle(articleId, request, user.getId());
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<GetArticlesResponse>> getArticles(
-    ){
-        List<GetArticlesResponse> response = articleService.getArticles();
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/{articleId}")
-    public ResponseEntity<GetArticleResponse> getArticle(
-            @PathVariable Long articleId
-    ){
-        GetArticleResponse response = articleService.getArticle(articleId);
         return ResponseEntity.ok(response);
     }
 }

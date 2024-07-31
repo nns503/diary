@@ -1,7 +1,7 @@
 package backend.diary.domain.community.controller;
 
-import backend.diary.domain.community.dto.GetArticleResponse;
-import backend.diary.domain.community.dto.GetArticlesResponse;
+import backend.diary.domain.community.dto.response.GetArticleResponse;
+import backend.diary.domain.community.dto.response.GetArticlesResponse;
 import backend.diary.domain.community.service.GetArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package backend.diary.domain.community.dto;
+package backend.diary.domain.community.dto.response;
 
 import backend.diary.domain.community.entity.Article;
 

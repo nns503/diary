@@ -1,14 +1,15 @@
 package backend.diary.domain.community.controller;
 
-import backend.diary.domain.community.dto.CreateArticleRequest;
-import backend.diary.domain.community.dto.CreateArticleResponse;
-import backend.diary.domain.community.dto.UpdateArticleRequest;
-import backend.diary.domain.community.dto.UpdateArticleResponse;
+import backend.diary.domain.community.dto.request.CreateArticleRequest;
+import backend.diary.domain.community.dto.response.CreateArticleResponse;
+import backend.diary.domain.community.dto.request.UpdateArticleRequest;
+import backend.diary.domain.community.dto.response.UpdateArticleResponse;
 import backend.diary.domain.community.service.ArticleService;
-import backend.diary.domain.user.entity.User;
+import backend.diary.domain.user.entity.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -20,11 +21,11 @@ public class ArticleController {
 
     @PostMapping
     public ResponseEntity<CreateArticleResponse> createArticle(
-            @RequestBody CreateArticleRequest request,
-            @AuthenticationPrincipal User user
+            @Validated @RequestBody CreateArticleRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
             ) {
 
-        CreateArticleResponse response = articleService.createArticle(request, user.getId());
+        CreateArticleResponse response = articleService.createArticle(request, userDetails.getUser().getId());
 
         return ResponseEntity.ok(response);
     }
@@ -32,19 +33,19 @@ public class ArticleController {
     @DeleteMapping("/{articleId}")
     public ResponseEntity<String> deleteArticle(
             @PathVariable Long articleId,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ){
-        articleService.deleteArticle(articleId, user.getId());
+        articleService.deleteArticle(articleId, userDetails.getUser().getId());
         return ResponseEntity.ok("게시글을 삭제했습니다.");
     }
 
     @PutMapping("/{articleId}")
     public ResponseEntity<UpdateArticleResponse> updateArticle(
             @PathVariable Long articleId,
-            @RequestBody UpdateArticleRequest request,
-            @AuthenticationPrincipal User user
+            @Validated @RequestBody UpdateArticleRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ){
-        UpdateArticleResponse response = articleService.updateArticle(articleId, request, user.getId());
+        UpdateArticleResponse response = articleService.updateArticle(articleId, request, userDetails.getUser().getId());
         return ResponseEntity.ok(response);
     }
 }

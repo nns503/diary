@@ -1,9 +1,9 @@
 package backend.diary.domain.community.service;
 
-import backend.diary.domain.community.dto.CreateArticleRequest;
-import backend.diary.domain.community.dto.CreateArticleResponse;
-import backend.diary.domain.community.dto.UpdateArticleRequest;
-import backend.diary.domain.community.dto.UpdateArticleResponse;
+import backend.diary.domain.community.dto.request.CreateArticleRequest;
+import backend.diary.domain.community.dto.response.CreateArticleResponse;
+import backend.diary.domain.community.dto.request.UpdateArticleRequest;
+import backend.diary.domain.community.dto.response.UpdateArticleResponse;
 import backend.diary.domain.community.entity.Article;
 import backend.diary.domain.community.entity.repository.ArticleRepository;
 import backend.diary.domain.community.exception.ArticleAlreadyDeletedException;

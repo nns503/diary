@@ -1,14 +1,16 @@
     package backend.diary.global.auth.filter;
 
     import backend.diary.domain.user.entity.CustomUserDetails;
-    import backend.diary.domain.user.entity.User;
     import backend.diary.domain.user.entity.UserRole;
+    import backend.diary.global.auth.dto.LoginDTO;
     import backend.diary.global.auth.entity.RefreshEntity;
     import backend.diary.global.auth.entity.repository.RefreshRepository;
     import backend.diary.global.auth.jwt.JWTUtil;
     import backend.diary.global.utill.ResponseUtil;
+    import com.fasterxml.jackson.databind.ObjectMapper;
     import jakarta.servlet.FilterChain;
     import jakarta.servlet.ServletException;
+    import jakarta.servlet.ServletInputStream;
     import jakarta.servlet.http.Cookie;
     import jakarta.servlet.http.HttpServletRequest;
     import jakarta.servlet.http.HttpServletResponse;
@@ -20,8 +22,10 @@
     import org.springframework.security.core.AuthenticationException;
     import org.springframework.security.core.GrantedAuthority;
     import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+    import org.springframework.util.StreamUtils;
 
     import java.io.IOException;
+    import java.nio.charset.StandardCharsets;
     import java.util.Collection;
     import java.util.Iterator;
 
@@ -34,13 +38,25 @@
 
         @Override
         public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-            String username = obtainUsername(request);
-            String password = obtainPassword(request);
+            LoginDTO loginDTO = new LoginDTO();
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                ServletInputStream inputStream = request.getInputStream();
+                String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+                loginDTO = objectMapper.readValue(messageBody, LoginDTO.class);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            String username = loginDTO.getUsername();
+            String password = loginDTO.getPassword();
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
 
             return authenticationManager.authenticate(authToken);
         }
+
 
         @Override
         protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {

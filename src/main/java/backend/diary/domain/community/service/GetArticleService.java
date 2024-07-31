@@ -1,7 +1,7 @@
 package backend.diary.domain.community.service;
 
-import backend.diary.domain.community.dto.GetArticleResponse;
-import backend.diary.domain.community.dto.GetArticlesResponse;
+import backend.diary.domain.community.dto.response.GetArticleResponse;
+import backend.diary.domain.community.dto.response.GetArticlesResponse;
 import backend.diary.domain.community.entity.Article;
 import backend.diary.domain.community.entity.repository.ArticleRepository;
 import backend.diary.domain.community.exception.NotFoundArticleException;

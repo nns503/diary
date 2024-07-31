@@ -1,7 +1,6 @@
-package backend.diary.domain.community.dto;
+package backend.diary.domain.community.dto.response;
 
 import backend.diary.domain.community.entity.Article;
-import backend.diary.domain.user.entity.User;
 
 import java.time.LocalDateTime;
 

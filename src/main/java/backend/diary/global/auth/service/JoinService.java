@@ -29,7 +29,7 @@ public class JoinService {
                 .username(username)
                 .password(passwordEncoder.encode(password))
                 .nickname(nickname)
-                .role(UserRole.ROLE_ADMIN)
+                .role(UserRole.ROLE_USER)
                 .build();
 
         userRepository.save(user);

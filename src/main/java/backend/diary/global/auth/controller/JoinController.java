@@ -14,11 +14,10 @@ public class JoinController {
     private final JoinService joinService;
 
     @PostMapping("/join")
-    public ResponseEntity<Void> join(JoinRequest joinRequest) {
+    public ResponseEntity<String> join(JoinRequest joinRequest) {
         joinService.joinUser(joinRequest);
 
         return ResponseEntity
-                .ok()
-                .build();
+                .ok("회원 가입에 성공하였습니다");
     }
 }

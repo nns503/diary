@@ -1,5 +1,6 @@
 package backend.diary.global.auth.filter;
 
+import backend.diary.domain.user.entity.CustomUserDetails;
 import backend.diary.domain.user.entity.User;
 import backend.diary.global.auth.exception.CustomJwtException;
 import backend.diary.global.auth.jwt.JWTUtil;
@@ -44,9 +45,9 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         String username = jwtUtil.getUsername(accessToken);
-        UserDetails userDetails = (User)userDetailsService.loadUserByUsername(username);
+        CustomUserDetails customUserDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(username);
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);

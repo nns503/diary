@@ -1,5 +1,6 @@
     package backend.diary.global.auth.filter;
 
+    import backend.diary.domain.user.entity.CustomUserDetails;
     import backend.diary.domain.user.entity.User;
     import backend.diary.domain.user.entity.UserRole;
     import backend.diary.global.auth.entity.RefreshEntity;
@@ -43,8 +44,8 @@
 
         @Override
         protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-            User user = (User) authentication.getPrincipal();
-            String username = user.getUsername();
+            CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+            String username = customUserDetails.getUsername();
 
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             Iterator<? extends GrantedAuthority> iterator = authorities.iterator();

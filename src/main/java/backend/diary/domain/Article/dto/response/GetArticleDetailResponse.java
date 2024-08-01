@@ -4,17 +4,19 @@ import backend.diary.domain.Article.entity.Article;
 
 import java.time.LocalDateTime;
 
-public record GetArticlesResponse(
+public record GetArticleDetailResponse(
         String title,
-        String content,
         String author,
+        String content,
+        String filePath,
         LocalDateTime createAt
-) {
-    public static GetArticlesResponse convertTo(Article article) {
-        return new GetArticlesResponse(
+){
+    public static GetArticleDetailResponse convertTo(Article article) {
+        return new GetArticleDetailResponse(
                 article.getTitle(),
-                article.getContent(),
                 article.getAuthor(),
+                article.getContent(),
+                article.getFilePath(),
                 article.getCreatedAt()
         );
     }

@@ -1,19 +1,18 @@
 package backend.diary.domain.Article.service;
 
-import backend.diary.domain.Article.dto.response.GetArticleResponse;
+import backend.diary.domain.Article.dto.response.GetArticleDetailResponse;
 import backend.diary.domain.Article.entity.Article;
 import backend.diary.domain.Article.entity.repository.ArticleRepository;
 import backend.diary.domain.Article.exception.NotFoundArticleException;
 import backend.diary.domain.Article.fixture.ArticleFixture;
 import backend.diary.domain.user.entity.User;
 import backend.diary.fixture.CommonUserFixture;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -46,13 +45,18 @@ class GetArticleServiceTest {
         article1 = articleFixture.기본게시물1(일반회원1);
     }
 
+    @ParameterizedTest()
+    void 게시글_목록_조회_성공(){
+
+    }
+
     @Test
     void 단일_게시글_조회_성공(){
         Long articleId = article1.getId();
         given(articleRepository.findById(articleId))
                 .willReturn(Optional.ofNullable(article1));
 
-        GetArticleResponse getArticleResponse = getArticleService.getArticle(articleId);
+        GetArticleDetailResponse getArticleResponse = getArticleService.getArticle(articleId);
 
         assertThat(getArticleResponse.title()).isEqualTo(article1.getTitle());
         assertThat(getArticleResponse.content()).isEqualTo(article1.getContent());
@@ -71,4 +75,5 @@ class GetArticleServiceTest {
                         getArticleService.getArticle(articleId));
 
     }
+    
 }

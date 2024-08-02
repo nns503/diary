@@ -1,0 +1,23 @@
+package backend.diary.domain.article.dto.response;
+
+import backend.diary.domain.article.entity.Article;
+
+import java.time.LocalDateTime;
+
+public record GetArticleDetailResponse(
+        String title,
+        String author,
+        String content,
+        String filePath,
+        LocalDateTime createAt
+){
+    public static GetArticleDetailResponse convertTo(Article article) {
+        return new GetArticleDetailResponse(
+                article.getTitle(),
+                article.getAuthor(),
+                article.getContent(),
+                article.getFilePath(),
+                article.getCreatedAt()
+        );
+    }
+}

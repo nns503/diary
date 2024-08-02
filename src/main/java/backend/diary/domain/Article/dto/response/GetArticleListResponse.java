@@ -5,7 +5,8 @@ import java.util.List;
 public record GetArticleListResponse(
         List<GetArticleResponse> articles,
         int page,
-        int size,
+        int pageSize,
+        int elements,
         Long totalElements,
         int totalPages
 ) { }

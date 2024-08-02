@@ -28,11 +28,12 @@ public class GetArticleService {
                 .toList();
 
         int page = articles.getNumber() + 1;
-        int size = articles.getSize();
+        int pageSize = articles.getSize();
+        int elements = articles.getNumberOfElements();
         long totalElements = articles.getTotalElements();
         int totalPages = articles.getTotalPages();
 
-        return new GetArticleListResponse(articleResponseList, page, size, totalElements, totalPages);
+        return new GetArticleListResponse(articleResponseList, page, pageSize, elements, totalElements, totalPages);
     }
 
     public GetArticleDetailResponse getArticle(Long articleId) {

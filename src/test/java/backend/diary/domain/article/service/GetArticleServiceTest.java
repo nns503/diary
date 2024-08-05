@@ -80,14 +80,15 @@ class GetArticleServiceTest {
         int expectedSize = (totalElements > start) ? Math.min(pageable.getPageSize(), totalElements - start) : 0;
 
         long index = start + 1;
+        //정렬 검사, 추후 삭제
         for (GetArticleResponse article : articleList.articles()) {
             assertThat(article.id()).isEqualTo(index++);
         }
         assertThat(articleList.page()).isEqualTo(pageable.getPageNumber() + 1);
         assertThat(articleList.pageSize()).isEqualTo(pageable.getPageSize());
         assertThat(articleList.elements()).isEqualTo(expectedSize);
-        assertThat(articleList.totalElements()).isEqualTo(pageArticles.getTotalElements());
-        assertThat(articleList.totalPages()).isEqualTo(pageArticles.getTotalPages());
+        assertThat(articleList.totalElements()).isEqualTo(articles.size());
+        assertThat(articleList.totalPages()).isEqualTo((articles.size() + pageable.getPageSize() - 1) / pageable.getPageSize());
     }
 
     @Test
@@ -120,6 +121,9 @@ class GetArticleServiceTest {
         return Stream.of(
                 Arguments.of(PageRequest.of(0, 5)),
                 Arguments.of(PageRequest.of(0, 10)),
+                Arguments.of(PageRequest.of(0, 33)),
+                Arguments.of(PageRequest.of(0, 32)),
+                Arguments.of(PageRequest.of(0, 34)),
                 Arguments.of(PageRequest.of(1, 5)),
                 Arguments.of(PageRequest.of(3, 10)),
                 Arguments.of(PageRequest.of(2, 100)) // 빈 페이지

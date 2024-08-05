@@ -8,7 +8,6 @@ import backend.diary.domain.comment.entity.Comment;
 import backend.diary.domain.comment.entity.repository.CommentRepository;
 import backend.diary.domain.user.entity.User;
 import backend.diary.fixture.CommonUserFixture;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -28,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 

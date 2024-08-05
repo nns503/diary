@@ -1,5 +1,6 @@
-package backend.diary.domain.article.entity;
+package backend.diary.domain.comment.entity;
 
+import backend.diary.domain.article.entity.Article;
 import backend.diary.domain.user.entity.User;
 import backend.diary.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -10,9 +11,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "articles")
+@Table(name = "comments")
 @Entity
-public class Article extends BaseTimeEntity {
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,14 +22,12 @@ public class Article extends BaseTimeEntity {
     @Column(name = "author", nullable = false)
     private String author;
 
-    @Column(name = "title", nullable = false)
-    private String title;
-
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "file_path")
-    private String filePath;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "article_id", nullable = false)
+    private Article article;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -37,24 +36,21 @@ public class Article extends BaseTimeEntity {
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
-    @Builder
-    public Article(Long id, String author, String title, String content, String filePath, User user, Boolean isDeleted) {
-        this.id = id;
-        this.author = author;
-        this.title = title;
+    public void update(String content){
         this.content = content;
-        this.filePath = filePath;
-        this.user = user;
-        this.isDeleted = isDeleted;
-    }
-
-    public void update(String title, String content, String filePath){
-        this.title = title;
-        this.content = content;
-        this.filePath = filePath;
     }
 
     public void delete(){
         this.isDeleted = true;
+    }
+
+    @Builder
+    public Comment(Long id, String author, String content, Article article, User user, Boolean isDeleted){
+        this.id = id;
+        this.author = author;
+        this.content = content;
+        this.article = article;
+        this.user = user;
+        this.isDeleted = isDeleted;
     }
 }

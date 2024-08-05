@@ -53,7 +53,6 @@ public class ArticleService {
         validateArticleAuthor(userId, findUserId);
 
         findArticle.delete();
-
         articleRepository.save(findArticle);
     }
 

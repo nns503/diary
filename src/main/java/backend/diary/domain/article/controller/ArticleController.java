@@ -1,8 +1,8 @@
 package backend.diary.domain.article.controller;
 
 import backend.diary.domain.article.dto.request.CreateArticleRequest;
-import backend.diary.domain.article.dto.response.CreateArticleResponse;
 import backend.diary.domain.article.dto.request.UpdateArticleRequest;
+import backend.diary.domain.article.dto.response.CreateArticleResponse;
 import backend.diary.domain.article.dto.response.UpdateArticleResponse;
 import backend.diary.domain.article.service.ArticleService;
 import backend.diary.domain.user.entity.CustomUserDetails;

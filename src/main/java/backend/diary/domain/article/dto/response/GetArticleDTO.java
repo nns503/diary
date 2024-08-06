@@ -4,15 +4,15 @@ import backend.diary.domain.article.entity.Article;
 
 import java.time.LocalDateTime;
 
-public record GetArticleResponse(
+public record GetArticleDTO(
         long id,
         String title,
         String content,
         String author,
         LocalDateTime createAt
 ) {
-    public static GetArticleResponse convertTo(Article article) {
-        return new GetArticleResponse(
+    public static GetArticleDTO toConvert(Article article) {
+        return new GetArticleDTO(
                 article.getId(),
                 article.getTitle(),
                 article.getContent(),

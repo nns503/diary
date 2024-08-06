@@ -1,8 +1,8 @@
 package backend.diary.domain.article.service;
 
 import backend.diary.domain.article.dto.request.CreateArticleRequest;
-import backend.diary.domain.article.dto.response.CreateArticleResponse;
 import backend.diary.domain.article.dto.request.UpdateArticleRequest;
+import backend.diary.domain.article.dto.response.CreateArticleResponse;
 import backend.diary.domain.article.dto.response.UpdateArticleResponse;
 import backend.diary.domain.article.entity.Article;
 import backend.diary.domain.article.entity.repository.ArticleRepository;
@@ -38,9 +38,9 @@ public class ArticleService {
                 .isDeleted(false)
                 .build();
 
-        Article savedArticle = articleRepository.save(article);
+        Article craeteArticle = articleRepository.save(article);
 
-        return new CreateArticleResponse(savedArticle.getId(), savedArticle.getTitle(), savedArticle.getContent(), savedArticle.getFilePath());
+        return CreateArticleResponse.of(craeteArticle);
     }
 
     @Transactional
@@ -66,9 +66,9 @@ public class ArticleService {
         validateArticleAuthor(userId, findUserId);
 
         findArticle.update(request.title(), request.content(), request.filePath());
-        Article updatedArticle = articleRepository.save(findArticle);
+        Article updateArticle = articleRepository.save(findArticle);
 
-        return new UpdateArticleResponse(updatedArticle.getId(), updatedArticle.getTitle(), updatedArticle.getContent(), updatedArticle.getFilePath());
+        return UpdateArticleResponse.of(updateArticle);
     }
 
     private void validateArticleAuthor(Long userId, Long findUserId) {

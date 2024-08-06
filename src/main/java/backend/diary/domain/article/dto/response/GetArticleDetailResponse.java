@@ -11,7 +11,7 @@ public record GetArticleDetailResponse(
         String filePath,
         LocalDateTime createAt
 ){
-    public static GetArticleDetailResponse convertTo(Article article) {
+    public static GetArticleDetailResponse of(Article article) {
         return new GetArticleDetailResponse(
                 article.getTitle(),
                 article.getAuthor(),

@@ -2,7 +2,7 @@ package backend.diary.domain.article.service;
 
 import backend.diary.domain.article.dto.response.GetArticleDetailResponse;
 import backend.diary.domain.article.dto.response.GetArticleListResponse;
-import backend.diary.domain.article.dto.response.GetArticleResponse;
+import backend.diary.domain.article.dto.response.GetArticleDTO;
 import backend.diary.domain.article.entity.Article;
 import backend.diary.domain.article.entity.repository.ArticleRepository;
 import backend.diary.domain.article.exception.NotFoundArticleException;
@@ -81,7 +81,7 @@ class GetArticleServiceTest {
 
         long index = start + 1;
         //정렬 검사, 추후 삭제
-        for (GetArticleResponse article : articleList.articles()) {
+        for (GetArticleDTO article : articleList.articles()) {
             assertThat(article.id()).isEqualTo(index++);
         }
         assertThat(articleList.page()).isEqualTo(pageable.getPageNumber() + 1);

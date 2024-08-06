@@ -47,7 +47,7 @@ public class CommentService {
 
         Comment savedComment = commentRepository.save(comment);
 
-        return new CreateCommentResponse(savedComment.getId(), savedComment.getContent());
+        return CreateCommentResponse.of(savedComment);
     }
 
     @Transactional
@@ -75,7 +75,7 @@ public class CommentService {
         findComment.update(request.content());
         Comment updatedComment = commentRepository.save(findComment);
 
-        return new UpdateCommentResponse(updatedComment.getId(), updatedComment.getContent());
+        return UpdateCommentResponse.of(updatedComment);
     }
 
     private void validateDeleteComment(Article findArticle) {

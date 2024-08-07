@@ -6,15 +6,15 @@ import java.time.LocalDateTime;
 
 public record GetCommentResponse(
         long id,
-        String content,
         String author,
+        String content,
         LocalDateTime createAt
 ) {
     public static GetCommentResponse convertTo(Comment comment) {
         return new GetCommentResponse(
                 comment.getId(),
+                comment.getUser().getNickname(),
                 comment.getContent(),
-                comment.getAuthor(),
                 comment.getCreatedAt()
         );
     }

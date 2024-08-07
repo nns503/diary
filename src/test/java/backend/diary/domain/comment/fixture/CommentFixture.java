@@ -10,7 +10,6 @@ public class CommentFixture {
     public Comment 기본댓글1(User user, Article article) {
         return Comment.builder()
                 .id(1L)
-                .author(user.getNickname())
                 .content("첫번째 기본 댓글입니다.")
                 .isDeleted(false)
                 .user(user)

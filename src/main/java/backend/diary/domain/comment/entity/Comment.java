@@ -19,9 +19,6 @@ public class Comment extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "author", nullable = false)
-    private String author;
-
     @Column(name = "content", nullable = false)
     private String content;
 
@@ -45,9 +42,8 @@ public class Comment extends BaseTimeEntity {
     }
 
     @Builder
-    public Comment(Long id, String author, String content, Article article, User user, Boolean isDeleted){
+    public Comment(Long id, String content, Article article, User user, Boolean isDeleted){
         this.id = id;
-        this.author = author;
         this.content = content;
         this.article = article;
         this.user = user;

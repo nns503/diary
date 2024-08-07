@@ -46,11 +46,13 @@ class GetCommentServiceTest {
 
     private final CommonUserFixture commonUserFixture = new CommonUserFixture();
     private final ArticleFixture articleFixture = new ArticleFixture();
+
+    private User 일반회원1;
     private Article article1;
 
     @BeforeEach
     void setUp(){
-        User 일반회원1 = commonUserFixture.일반회원1;
+        일반회원1 = commonUserFixture.일반회원1;
         article1 = articleFixture.기본게시물1(일반회원1);
     }
 
@@ -61,6 +63,7 @@ class GetCommentServiceTest {
         for(long i=1; i<=33; i++){
             Comment comment = Comment.builder()
                     .id(i)
+                    .user(일반회원1)
                     .build();
             comments.add(comment);
         }

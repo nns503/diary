@@ -33,7 +33,6 @@ public class CommentService {
         validateDeleteComment(article);
 
         Comment comment = Comment.builder()
-                .author(user.getNickname())
                 .content(request.content())
                 .article(article)
                 .user(user)

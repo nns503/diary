@@ -35,12 +35,13 @@ public class Article extends BaseTimeEntity {
     private Integer likeCount;
 
     @Builder
-    public Article(Long id, String title, String content, User user, Boolean isDeleted) {
+    public Article(Long id, String title, String content, User user, Boolean isDeleted, Integer likeCount) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.user = user;
         this.isDeleted = isDeleted;
+        this.likeCount = likeCount;
     }
 
     public void update(String title, String content){
@@ -52,4 +53,11 @@ public class Article extends BaseTimeEntity {
         this.isDeleted = true;
     }
 
+    public void likeCountPlus(){
+        likeCount++;
+    }
+
+    public void likeCountMinus(){
+        likeCount--;
+    }
 }

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public record GetArticleDetailResponse(
         String title,
         String author,
+        int likeCount,
         String content,
         LocalDateTime createAt
 ){
@@ -14,6 +15,7 @@ public record GetArticleDetailResponse(
         return new GetArticleDetailResponse(
                 article.getTitle(),
                 article.getUser().getNickname(),
+                article.getLikeCount(),
                 article.getContent(),
                 article.getCreatedAt()
         );

@@ -34,6 +34,7 @@ public class LikeService {
                 .article(article)
                 .build();
 
+        article.likeCountPlus();
         likeRepository.save(like);
     }
 
@@ -42,6 +43,10 @@ public class LikeService {
         Like like = likeRepository.findByUserIdAndArticleId(user.getId(), articleId)
                 .orElseThrow(NotFoundLikedException::new);
 
+        Article article = articleRepository.findByIdAndIsDeletedFalse(articleId)
+                .orElseThrow(NotFoundArticleException::new);
+
+        article.likeCountMinus();
         likeRepository.delete(like);
     }
 }

@@ -29,6 +29,7 @@ public class ArticleService {
                 .content(request.content())
                 .user(user)
                 .isDeleted(false)
+                .likeCount(0)
                 .build();
 
         Article craeteArticle = articleRepository.save(article);

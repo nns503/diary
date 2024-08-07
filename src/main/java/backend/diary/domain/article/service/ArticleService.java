@@ -10,8 +10,6 @@ import backend.diary.domain.article.exception.AlreadyDeletedArticleException;
 import backend.diary.domain.article.exception.NotFoundArticleException;
 import backend.diary.domain.article.exception.UnauthorizedArticleException;
 import backend.diary.domain.user.entity.User;
-import backend.diary.domain.user.entity.repository.UserRepository;
-import backend.diary.domain.user.exception.NotFoundUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,12 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final UserRepository userRepository;
 
     @Transactional
-    public CreateArticleResponse createArticle(CreateArticleRequest request, Long userId) {
-        User user = userRepository.findById(userId).
-                orElseThrow(NotFoundUserException::new);
+    public CreateArticleResponse createArticle(User user, CreateArticleRequest request) {
 
         Article article = Article.builder()
                 .author(user.getNickname())
@@ -44,26 +39,24 @@ public class ArticleService {
     }
 
     @Transactional
-    public void deleteArticle(Long articleId, Long userId) {
+    public void deleteArticle(User user, Long articleId) {
         Article findArticle = articleRepository.findById(articleId)
                 .orElseThrow(NotFoundArticleException::new);
-        Long findUserId = findArticle.getUser().getId();
 
         validateDeleteArticle(findArticle);
-        validateArticleAuthor(userId, findUserId);
+        validateArticleAuthor(user, findArticle);
 
         findArticle.delete();
         articleRepository.save(findArticle);
     }
 
     @Transactional
-    public UpdateArticleResponse updateArticle(Long articleId, UpdateArticleRequest request, Long userId){
+    public UpdateArticleResponse updateArticle(User user, Long articleId, UpdateArticleRequest request){
         Article findArticle = articleRepository.findById(articleId)
                 .orElseThrow(NotFoundArticleException::new);
-        Long findUserId = findArticle.getUser().getId();
 
         validateDeleteArticle(findArticle);
-        validateArticleAuthor(userId, findUserId);
+        validateArticleAuthor(user, findArticle);
 
         findArticle.update(request.title(), request.content(), request.filePath());
         Article updateArticle = articleRepository.save(findArticle);
@@ -71,8 +64,10 @@ public class ArticleService {
         return UpdateArticleResponse.of(updateArticle);
     }
 
-    private void validateArticleAuthor(Long userId, Long findUserId) {
-        if (findUserId == null || !findUserId.equals(userId)) {
+    private void validateArticleAuthor(User user, Article article) {
+        Long userId = user.getId();
+        Long articleUserId = article.getUser().getId();
+        if (articleUserId == null || !articleUserId.equals(userId)) {
             throw new UnauthorizedArticleException();
         }
     }

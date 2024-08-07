@@ -53,7 +53,7 @@ class ArticleControllerTest extends ControllerTest {
         CreateArticleRequest createArticleRequest = new CreateArticleRequest(article1.getTitle(), article1.getContent(), article1.getFilePath());
         String request  = objectMapper.writeValueAsString(createArticleRequest);
 
-        given(articleService.createArticle(any(CreateArticleRequest.class), anyLong()))
+        given(articleService.createArticle(any(User.class), any(CreateArticleRequest.class)))
                 .willReturn(new CreateArticleResponse(article1.getId(), article1.getTitle(), article1.getContent(), article1.getFilePath()));
 
         ResultActions resultActions = mvc.perform(post("/api/article")
@@ -125,7 +125,7 @@ class ArticleControllerTest extends ControllerTest {
         DeleteArticleRequest deleteArticleRequest = new DeleteArticleRequest(article1.getId());
         String request  = objectMapper.writeValueAsString(deleteArticleRequest);
 
-        willDoNothing().given(articleService).deleteArticle(anyLong(), anyLong());
+        willDoNothing().given(articleService).deleteArticle(any(User.class), anyLong());
 
         ResultActions resultActions = mvc.perform(delete("/api/article/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -153,7 +153,7 @@ class ArticleControllerTest extends ControllerTest {
         UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(article1.getTitle(), article1.getContent(), article1.getFilePath());
         String request  = objectMapper.writeValueAsString(updateArticleRequest);
 
-        given(articleService.updateArticle(anyLong(), any(UpdateArticleRequest.class), anyLong()))
+        given(articleService.updateArticle(any(User.class), anyLong(), any(UpdateArticleRequest.class)))
                 .willReturn(new UpdateArticleResponse(article1.getId(), article1.getTitle(), article1.getContent(), article1.getFilePath()));
 
         ResultActions resultActions = mvc.perform(put("/api/article/1")

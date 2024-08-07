@@ -1,8 +1,8 @@
 package backend.diary.domain.article.service;
 
 import backend.diary.domain.article.dto.request.CreateArticleRequest;
-import backend.diary.domain.article.dto.response.CreateArticleResponse;
 import backend.diary.domain.article.dto.request.UpdateArticleRequest;
+import backend.diary.domain.article.dto.response.CreateArticleResponse;
 import backend.diary.domain.article.dto.response.UpdateArticleResponse;
 import backend.diary.domain.article.entity.Article;
 import backend.diary.domain.article.entity.repository.ArticleRepository;
@@ -11,7 +11,6 @@ import backend.diary.domain.article.exception.NotFoundArticleException;
 import backend.diary.domain.article.exception.UnauthorizedArticleException;
 import backend.diary.domain.article.fixture.ArticleFixture;
 import backend.diary.domain.user.entity.User;
-import backend.diary.domain.user.entity.repository.UserRepository;
 import backend.diary.fixture.CommonUserFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -24,9 +23,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.given;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -37,8 +37,6 @@ class ArticleServiceTest {
     private ArticleService articleService;
     @Mock
     private ArticleRepository articleRepository;
-    @Mock
-    private UserRepository userRepository;
 
     private final ArticleFixture articleFixture = new ArticleFixture();
     private final CommonUserFixture commonUserFixture = new CommonUserFixture();
@@ -57,10 +55,9 @@ class ArticleServiceTest {
     @Test
     void 게시글을_등록한다_성공(){
         CreateArticleRequest createArticleRequest = new CreateArticleRequest(article1.getTitle(), article1.getContent(), article1.getFilePath());
-        given(userRepository.findById(user_일반회원1.getId())).willReturn(Optional.ofNullable(user_일반회원1));
         given(articleRepository.save(any(Article.class))).willReturn(article1);
 
-        CreateArticleResponse response = articleService.createArticle(createArticleRequest, user_일반회원1.getId());
+        CreateArticleResponse response = articleService.createArticle(user_일반회원1, createArticleRequest);
 
         assertThat(response.articleId()).isEqualTo(article1.getId());
         assertThat(response.title()).isEqualTo(article1.getTitle());
@@ -72,7 +69,7 @@ class ArticleServiceTest {
     void 게시글을_삭제한다_성공(){
         given(articleRepository.findById(article1.getId())).willReturn(Optional.ofNullable(article1));
 
-        articleService.deleteArticle(article1.getId(), user_일반회원1.getId());
+        articleService.deleteArticle(user_일반회원1, article1.getId());
 
         assertThat(article1.getIsDeleted()).isEqualTo(true);
     }
@@ -83,7 +80,7 @@ class ArticleServiceTest {
 
         assertThrows(NotFoundArticleException.class,
                 ()->
-                        articleService.deleteArticle(article1.getId(), user_일반회원1.getId()));
+                        articleService.deleteArticle(user_일반회원1, article1.getId()));
     }
 
     @Test
@@ -93,7 +90,7 @@ class ArticleServiceTest {
 
         assertThrows(AlreadyDeletedArticleException.class,
                 ()->
-                        articleService.deleteArticle(article1.getId(), user_일반회원1.getId()));
+                        articleService.deleteArticle(user_일반회원1, article1.getId()));
     }
 
     @Test
@@ -102,7 +99,7 @@ class ArticleServiceTest {
 
         assertThrows(UnauthorizedArticleException.class,
                 ()->
-                        articleService.deleteArticle(article1.getId(), user_일반회원2.getId()));
+                        articleService.deleteArticle(user_일반회원2, article1.getId()));
     }
 
     @Test
@@ -111,7 +108,7 @@ class ArticleServiceTest {
         given(articleRepository.findById(article1.getId())).willReturn(Optional.ofNullable(article1));
         given(articleRepository.save(any(Article.class))).willReturn(article1);
 
-        UpdateArticleResponse response = articleService.updateArticle(article1.getId(), updateArticleRequest, user_일반회원1.getId());
+        UpdateArticleResponse response = articleService.updateArticle(user_일반회원1, article1.getId(), updateArticleRequest);
 
         assertThat(response.articleId()).isEqualTo(article1.getId());
         assertThat(response.title()).isEqualTo(updateArticleRequest.title());
@@ -126,7 +123,7 @@ class ArticleServiceTest {
 
         assertThrows(NotFoundArticleException.class,
                 ()->
-                        articleService.updateArticle(article1.getId(), updateArticleRequest, user_일반회원1.getId()));
+                        articleService.updateArticle(user_일반회원1, article1.getId(), updateArticleRequest));
     }
 
     @Test
@@ -137,7 +134,7 @@ class ArticleServiceTest {
 
         assertThrows(AlreadyDeletedArticleException.class,
                 ()->
-                        articleService.updateArticle(article1.getId(), updateArticleRequest, user_일반회원1.getId()));
+                        articleService.updateArticle( user_일반회원1, article1.getId(), updateArticleRequest));
     }
 
     @Test
@@ -147,7 +144,7 @@ class ArticleServiceTest {
 
         assertThrows(UnauthorizedArticleException.class,
                 ()->
-                        articleService.updateArticle(article1.getId(), updateArticleRequest, user_일반회원2.getId()));
+                        articleService.updateArticle(user_일반회원2, article1.getId(), updateArticleRequest));
     }
 
 }

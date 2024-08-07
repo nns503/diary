@@ -25,7 +25,7 @@ public class ArticleController {
             @AuthenticationPrincipal CustomUserDetails userDetails
             ) {
 
-        CreateArticleResponse response = articleService.createArticle(request, userDetails.getUser().getId());
+        CreateArticleResponse response = articleService.createArticle(userDetails.getUser(), request);
 
         return ResponseEntity.ok(response);
     }
@@ -35,7 +35,7 @@ public class ArticleController {
             @PathVariable Long articleId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
-        articleService.deleteArticle(articleId, userDetails.getUser().getId());
+        articleService.deleteArticle(userDetails.getUser(), articleId);
         return ResponseEntity.ok("게시글을 삭제했습니다.");
     }
 
@@ -45,7 +45,7 @@ public class ArticleController {
             @Validated @RequestBody UpdateArticleRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
-        UpdateArticleResponse response = articleService.updateArticle(articleId, request, userDetails.getUser().getId());
+        UpdateArticleResponse response = articleService.updateArticle(userDetails.getUser(), articleId, request);
         return ResponseEntity.ok(response);
     }
 }

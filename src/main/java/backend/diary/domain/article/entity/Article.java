@@ -31,7 +31,7 @@ public class Article extends BaseTimeEntity {
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
-    @Column(name = "like_Count", nullable = false)
+    @Column(name = "like_count", nullable = false)
     private Integer likeCount;
 
     @Builder

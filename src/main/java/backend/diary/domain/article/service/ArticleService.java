@@ -25,7 +25,6 @@ public class ArticleService {
     public CreateArticleResponse createArticle(User user, CreateArticleRequest request) {
 
         Article article = Article.builder()
-                .author(user.getNickname())
                 .title(request.title())
                 .content(request.content())
                 .filePath(request.filePath())

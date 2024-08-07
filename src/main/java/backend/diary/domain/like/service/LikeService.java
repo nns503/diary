@@ -33,6 +33,7 @@ public class LikeService {
                 .user(user)
                 .article(article)
                 .build();
+
         likeRepository.save(like);
     }
 

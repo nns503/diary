@@ -7,16 +7,16 @@ import java.time.LocalDateTime;
 public record GetArticleDTO(
         long id,
         String title,
-        String content,
         String author,
+        String content,
         LocalDateTime createAt
 ) {
     public static GetArticleDTO toConvert(Article article) {
         return new GetArticleDTO(
                 article.getId(),
                 article.getTitle(),
+                article.getUser().getNickname(),
                 article.getContent(),
-                article.getAuthor(),
                 article.getCreatedAt()
         );
     }

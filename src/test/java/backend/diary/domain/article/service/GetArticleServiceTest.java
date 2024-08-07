@@ -49,11 +49,12 @@ class GetArticleServiceTest {
     private final ArticleFixture articleFixture = new ArticleFixture();
     private final CommonUserFixture commonUserFixture = new CommonUserFixture();
 
+    private User 일반회원1;
     private Article article1;
 
     @BeforeEach
     void setUp(){
-        User 일반회원1 = commonUserFixture.일반회원1;
+        일반회원1 = commonUserFixture.일반회원1;
         article1 = articleFixture.기본게시물1(일반회원1);
     }
 
@@ -64,6 +65,7 @@ class GetArticleServiceTest {
         for(long i=1; i<=33; i++){
             Article article = Article.builder()
                     .id(i)
+                    .user(일반회원1)
                     .build();
             articles.add(article);
         }
@@ -101,7 +103,7 @@ class GetArticleServiceTest {
 
         assertThat(getArticleResponse.title()).isEqualTo(article1.getTitle());
         assertThat(getArticleResponse.content()).isEqualTo(article1.getContent());
-        assertThat(getArticleResponse.author()).isEqualTo(article1.getAuthor());
+        assertThat(getArticleResponse.author()).isEqualTo(article1.getUser().getNickname());
         assertThat(getArticleResponse.createAt()).isEqualTo(article1.getCreatedAt());
         assertThat(getArticleResponse.filePath()).isEqualTo(article1.getFilePath());
     }

@@ -6,6 +6,7 @@ import backend.diary.domain.article.dto.request.GetArticleListRequest;
 import backend.diary.domain.article.dto.response.GetArticleListResponse;
 import backend.diary.domain.article.entity.Article;
 import backend.diary.domain.article.service.GetArticleService;
+import backend.diary.fixture.CommonUserFixture;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,8 @@ class GetArticleControllerTest extends ControllerTest {
     @MockBean
     private GetArticleService getArticleService;
 
+    private final CommonUserFixture commonUserFixture = new CommonUserFixture();
+
     @ParameterizedTest()
     @MethodSource("provideGetArticleListRequestParameters")
     @WithMockCustomUser
@@ -49,6 +52,7 @@ class GetArticleControllerTest extends ControllerTest {
         for(long i=1; i<=33; i++){
             Article article = Article.builder()
                     .id(i)
+                    .user(commonUserFixture.일반회원1)
                     .build();
             articles.add(article);
         }

@@ -14,7 +14,7 @@ public record GetArticleDetailResponse(
     public static GetArticleDetailResponse of(Article article) {
         return new GetArticleDetailResponse(
                 article.getTitle(),
-                article.getAuthor(),
+                article.getUser().getNickname(),
                 article.getContent(),
                 article.getFilePath(),
                 article.getCreatedAt()

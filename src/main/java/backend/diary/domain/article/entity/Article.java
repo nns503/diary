@@ -18,9 +18,6 @@ public class Article extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "author", nullable = false)
-    private String author;
-
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -38,9 +35,8 @@ public class Article extends BaseTimeEntity {
     private Boolean isDeleted;
 
     @Builder
-    public Article(Long id, String author, String title, String content, String filePath, User user, Boolean isDeleted) {
+    public Article(Long id, String title, String content, String filePath, User user, Boolean isDeleted) {
         this.id = id;
-        this.author = author;
         this.title = title;
         this.content = content;
         this.filePath = filePath;

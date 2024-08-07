@@ -14,8 +14,6 @@ import backend.diary.domain.comment.exception.AlreadyDeletedCommentException;
 import backend.diary.domain.comment.exception.NotFoundCommentException;
 import backend.diary.domain.comment.exception.UnauthorizedCommentException;
 import backend.diary.domain.user.entity.User;
-import backend.diary.domain.user.entity.repository.UserRepository;
-import backend.diary.domain.user.exception.NotFoundUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
 
     @Transactional
-    public CreateCommentResponse createComment(CreateCommentRequest request, Long articleId, Long userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(NotFoundUserException::new);
+    public CreateCommentResponse createComment(User user, CreateCommentRequest request, Long articleId){
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(NotFoundArticleException::new);
         validateDeleteComment(article);
@@ -51,26 +46,24 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(Long commentId, Long userId){
+    public void deleteComment(User user, Long commentId){
         Comment findComment = commentRepository.findById(commentId)
                 .orElseThrow(NotFoundCommentException::new);
-        Long findUserId = findComment.getUser().getId();
 
         validateDeleteComment(findComment);
-        validateCommentAuthor(findUserId, userId);
+        validateCommentAuthor(user, findComment);
 
         findComment.delete();
         commentRepository.save(findComment);
     }
 
     @Transactional
-    public UpdateCommentResponse updateComment(UpdateCommentRequest request, Long commentId, Long userId){
+    public UpdateCommentResponse updateComment(User user, UpdateCommentRequest request, Long commentId){
         Comment findComment = commentRepository.findById(commentId)
                 .orElseThrow(NotFoundCommentException::new);
-        Long findUserId = findComment.getUser().getId();
 
         validateDeleteComment(findComment);
-        validateCommentAuthor(findUserId, userId);
+        validateCommentAuthor(user, findComment);
 
         findComment.update(request.content());
         Comment updatedComment = commentRepository.save(findComment);
@@ -84,8 +77,10 @@ public class CommentService {
         }
     }
 
-    private void validateCommentAuthor(Long userId, Long findUserId) {
-        if (findUserId == null || !findUserId.equals(userId)) {
+    private void validateCommentAuthor(User user, Comment comment) {
+        Long userId = user.getId();
+        Long commentUserId = comment.getUser().getId();
+        if (commentUserId == null || !commentUserId.equals(userId)) {
             throw new UnauthorizedCommentException();
         }
     }

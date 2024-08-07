@@ -25,7 +25,7 @@ public class CommentController {
             @PathVariable Long articleId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        CreateCommentResponse response = commentService.createComment(request, articleId, userDetails.getUser().getId());
+        CreateCommentResponse response = commentService.createComment(userDetails.getUser(), request, articleId);
 
         return ResponseEntity.ok(response);
     }
@@ -35,7 +35,7 @@ public class CommentController {
             @PathVariable Long commentId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        commentService.deleteComment(commentId, userDetails.getUser().getId());
+        commentService.deleteComment(userDetails.getUser(), commentId);
         return ResponseEntity.ok("댓글을 삭제했습니다.");
     }
 
@@ -45,7 +45,7 @@ public class CommentController {
             @PathVariable Long commentId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
-        UpdateCommentResponse response = commentService.updateComment(request, commentId, userDetails.getUser().getId());
+        UpdateCommentResponse response = commentService.updateComment(userDetails.getUser(), request, commentId);
         return ResponseEntity.ok(response);
     }
 }

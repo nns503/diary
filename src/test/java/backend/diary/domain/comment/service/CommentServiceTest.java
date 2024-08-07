@@ -16,8 +16,6 @@ import backend.diary.domain.comment.exception.NotFoundCommentException;
 import backend.diary.domain.comment.exception.UnauthorizedCommentException;
 import backend.diary.domain.comment.fixture.CommentFixture;
 import backend.diary.domain.user.entity.User;
-import backend.diary.domain.user.entity.repository.UserRepository;
-import backend.diary.domain.user.exception.NotFoundUserException;
 import backend.diary.fixture.CommonUserFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -45,8 +43,6 @@ class CommentServiceTest {
     @Mock
     private CommentRepository commentRepository;
     @Mock
-    private UserRepository userRepository;
-    @Mock
     private ArticleRepository articleRepository;
 
     private final CommonUserFixture userFixture = new CommonUserFixture();
@@ -70,51 +66,33 @@ class CommentServiceTest {
     @Test
     void 댓글_등록한다_성공(){
         CreateCommentRequest request = new CreateCommentRequest(comment1.getContent());
-        given(userRepository.findById(anyLong()))
-                .willReturn(Optional.ofNullable(user_일반회원1));
         given(articleRepository.findById(anyLong()))
                 .willReturn(Optional.ofNullable(article1));
         given(commentRepository.save(any(Comment.class)))
                 .willReturn(comment1);
 
         CreateCommentResponse response = commentService
-                .createComment(request, article1.getId(), user_일반회원1.getId());
+                .createComment(user_일반회원1, request, article1.getId());
 
         assertThat(response.commentId()).isEqualTo(comment1.getId());
         assertThat(response.content()).isEqualTo(comment1.getContent());
     }
 
     @Test
-    void 댓글_등록한다_실패_존재하지않는_유저(){
-        CreateCommentRequest request = new CreateCommentRequest(comment1.getContent());
-        given(userRepository.findById(anyLong()))
-                .willReturn(Optional.empty());
-
-        assertThrows(NotFoundUserException.class,
-                () ->
-                        commentService
-                                .createComment(request, article1.getId(), user_일반회원1.getId()));
-    }
-
-    @Test
     void 댓글_등록한다_실패_존재하지않는_게시글(){
         CreateCommentRequest request = new CreateCommentRequest(comment1.getContent());
-        given(userRepository.findById(anyLong()))
-                .willReturn(Optional.ofNullable(user_일반회원1));
         given(articleRepository.findById(anyLong()))
                 .willReturn(Optional.empty());
 
         assertThrows(NotFoundArticleException.class,
                 () ->
                         commentService
-                                .createComment(request, article1.getId(), user_일반회원1.getId()));
+                                .createComment(user_일반회원1, request, article1.getId()));
     }
 
     @Test
     void 댓글_등록한다_실패_삭제된_게시글(){
         CreateCommentRequest request = new CreateCommentRequest(comment1.getContent());
-        given(userRepository.findById(anyLong()))
-                .willReturn(Optional.ofNullable(user_일반회원1));
         given(articleRepository.findById(anyLong()))
                 .willReturn(Optional.ofNullable(article1));
         article1.delete();
@@ -122,7 +100,7 @@ class CommentServiceTest {
         assertThrows(AlreadyDeletedArticleException.class,
                 () ->
                         commentService
-                                .createComment(request, article1.getId(), user_일반회원1.getId()));
+                                .createComment(user_일반회원1, request, article1.getId()));
     }
 
     @Test
@@ -130,7 +108,7 @@ class CommentServiceTest {
         given(commentRepository.findById(anyLong()))
                 .willReturn(Optional.ofNullable(comment1));
 
-        commentService.deleteComment(comment1.getId(), user_일반회원1.getId());
+        commentService.deleteComment(user_일반회원1, comment1.getId());
 
         assertThat(comment1.getIsDeleted()).isEqualTo(true);
     }
@@ -143,7 +121,7 @@ class CommentServiceTest {
         assertThrows(NotFoundCommentException.class,
                 () ->
                         commentService
-                                .deleteComment(comment1.getId(), user_일반회원1.getId()));
+                                .deleteComment(user_일반회원1, comment1.getId()));
     }
 
     @Test
@@ -156,7 +134,7 @@ class CommentServiceTest {
         assertThrows(AlreadyDeletedCommentException.class,
                 () ->
                         commentService
-                                .deleteComment(comment1.getId(), user_일반회원1.getId()));
+                                .deleteComment(user_일반회원1, comment1.getId()));
     }
 
     @Test
@@ -167,7 +145,7 @@ class CommentServiceTest {
         assertThrows(UnauthorizedCommentException.class,
                 () ->
                         commentService
-                                .deleteComment(comment1.getId(), user_일반회원2.getId()));
+                                .deleteComment(user_일반회원2, comment1.getId()));
     }
 
     @Test
@@ -179,7 +157,7 @@ class CommentServiceTest {
                 .willReturn(comment1);
 
         UpdateCommentResponse response = commentService
-                .updateComment(request, comment1.getId(), user_일반회원1.getId());
+                .updateComment(user_일반회원1, request, comment1.getId());
 
         assertThat(response.commentId()).isEqualTo(comment1.getId());
         assertThat(response.content()).isEqualTo(request.content());
@@ -194,7 +172,7 @@ class CommentServiceTest {
         assertThrows(NotFoundCommentException.class,
                 () ->
                         commentService
-                                .updateComment(request, comment1.getId(), user_일반회원1.getId()));
+                                .updateComment(user_일반회원1, request, comment1.getId()));
     }
 
     @Test
@@ -207,7 +185,7 @@ class CommentServiceTest {
         assertThrows(AlreadyDeletedCommentException.class,
                 () ->
                         commentService
-                                .updateComment(request, comment1.getId(), user_일반회원1.getId()));
+                                .updateComment(user_일반회원1, request, comment1.getId()));
     }
 
     @Test
@@ -219,6 +197,6 @@ class CommentServiceTest {
         assertThrows(UnauthorizedCommentException.class,
                 () ->
                         commentService
-                                .updateComment(request, comment1.getId(), user_일반회원2.getId()));
+                                .updateComment(user_일반회원2, request, comment1.getId()));
     }
 }

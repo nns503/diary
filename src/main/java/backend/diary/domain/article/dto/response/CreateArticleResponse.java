@@ -5,10 +5,9 @@ import backend.diary.domain.article.entity.Article;
 public record CreateArticleResponse(
         Long articleId,
         String title,
-        String content,
-        String filePath
+        String content
 ) {
     public static CreateArticleResponse of(Article article) {
-        return new CreateArticleResponse(article.getId(), article.getTitle(), article.getContent(), article.getFilePath());
+        return new CreateArticleResponse(article.getId(), article.getTitle(), article.getContent());
     }
 }

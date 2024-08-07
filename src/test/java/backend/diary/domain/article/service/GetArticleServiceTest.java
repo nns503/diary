@@ -105,7 +105,6 @@ class GetArticleServiceTest {
         assertThat(getArticleResponse.content()).isEqualTo(article1.getContent());
         assertThat(getArticleResponse.author()).isEqualTo(article1.getUser().getNickname());
         assertThat(getArticleResponse.createAt()).isEqualTo(article1.getCreatedAt());
-        assertThat(getArticleResponse.filePath()).isEqualTo(article1.getFilePath());
     }
 
     @Test

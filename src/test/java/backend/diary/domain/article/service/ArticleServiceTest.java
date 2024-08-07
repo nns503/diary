@@ -54,7 +54,7 @@ class ArticleServiceTest {
 
     @Test
     void 게시글을_등록한다_성공(){
-        CreateArticleRequest createArticleRequest = new CreateArticleRequest(article1.getTitle(), article1.getContent(), article1.getFilePath());
+        CreateArticleRequest createArticleRequest = new CreateArticleRequest(article1.getTitle(), article1.getContent());
         given(articleRepository.save(any(Article.class))).willReturn(article1);
 
         CreateArticleResponse response = articleService.createArticle(user_일반회원1, createArticleRequest);
@@ -62,7 +62,6 @@ class ArticleServiceTest {
         assertThat(response.articleId()).isEqualTo(article1.getId());
         assertThat(response.title()).isEqualTo(article1.getTitle());
         assertThat(response.content()).isEqualTo(article1.getContent());
-        assertThat(response.filePath()).isEqualTo(article1.getFilePath());
     }
 
     @Test
@@ -104,7 +103,7 @@ class ArticleServiceTest {
 
     @Test
     void 게시글을_수정한다_성공(){
-        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest("수정된 제목", "수정된 내용", "수정된 주소");
+        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest("수정된 제목", "수정된 내용");
         given(articleRepository.findById(article1.getId())).willReturn(Optional.ofNullable(article1));
         given(articleRepository.save(any(Article.class))).willReturn(article1);
 
@@ -113,12 +112,11 @@ class ArticleServiceTest {
         assertThat(response.articleId()).isEqualTo(article1.getId());
         assertThat(response.title()).isEqualTo(updateArticleRequest.title());
         assertThat(response.content()).isEqualTo(updateArticleRequest.content());
-        assertThat(response.filePath()).isEqualTo(updateArticleRequest.filePath());
     }
 
     @Test
     void 게시글을_수정한다_실패_게시글이_존재하지_않음(){
-        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest("수정된 제목", "수정된 내용", "수정된 주소");
+        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest("수정된 제목", "수정된 내용");
         given(articleRepository.findById(article1.getId())).willReturn(Optional.empty());
 
         assertThrows(NotFoundArticleException.class,
@@ -129,7 +127,7 @@ class ArticleServiceTest {
     @Test
     void 게시글을_수정한다_실패_이미_삭제된_게시글(){
         article1.delete();
-        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest("수정된 제목", "수정된 내용", "수정된 주소");
+        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest("수정된 제목", "수정된 내용");
         given(articleRepository.findById(article1.getId())).willReturn(Optional.ofNullable(article1));
 
         assertThrows(AlreadyDeletedArticleException.class,
@@ -139,7 +137,7 @@ class ArticleServiceTest {
 
     @Test
     void 게시글을_수정한다_실패_작성자와_다른_작성자가_수정(){
-        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest("수정된 제목", "수정된 내용", "수정된 주소");
+        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest("수정된 제목", "수정된 내용");
         given(articleRepository.findById(article1.getId())).willReturn(Optional.ofNullable(article1));
 
         assertThrows(UnauthorizedArticleException.class,

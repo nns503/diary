@@ -11,7 +11,6 @@ public class ArticleFixture {
                 .id(1L)
                 .title("기본게시물1")
                 .content("어떤 내용이 들어가는게 좋을까요? 1번 문장입니다.")
-                .filePath("첫번째 파일 주소입니다")
                 .isDeleted(false)
                 .user(user)
                 .build();

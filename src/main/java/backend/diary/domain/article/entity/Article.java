@@ -24,9 +24,6 @@ public class Article extends BaseTimeEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "file_path")
-    private String filePath;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -34,23 +31,25 @@ public class Article extends BaseTimeEntity {
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
+    @Column(name = "like_Count", nullable = false)
+    private Integer likeCount;
+
     @Builder
-    public Article(Long id, String title, String content, String filePath, User user, Boolean isDeleted) {
+    public Article(Long id, String title, String content, User user, Boolean isDeleted) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.filePath = filePath;
         this.user = user;
         this.isDeleted = isDeleted;
     }
 
-    public void update(String title, String content, String filePath){
+    public void update(String title, String content){
         this.title = title;
         this.content = content;
-        this.filePath = filePath;
     }
 
     public void delete(){
         this.isDeleted = true;
     }
+
 }

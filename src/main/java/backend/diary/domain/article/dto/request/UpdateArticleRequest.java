@@ -9,7 +9,6 @@ public record UpdateArticleRequest(
         String title,
         @NotEmpty(message = "내용을 작성해주세요")
         @Size(min = 1, message = "내용을 작성해주세요")
-        String content,
-        String filePath
+        String content
 ) {
 }

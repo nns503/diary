@@ -8,7 +8,6 @@ public record GetArticleDetailResponse(
         String title,
         String author,
         String content,
-        String filePath,
         LocalDateTime createAt
 ){
     public static GetArticleDetailResponse of(Article article) {
@@ -16,7 +15,6 @@ public record GetArticleDetailResponse(
                 article.getTitle(),
                 article.getUser().getNickname(),
                 article.getContent(),
-                article.getFilePath(),
                 article.getCreatedAt()
         );
     }

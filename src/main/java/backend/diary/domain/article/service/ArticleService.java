@@ -27,7 +27,6 @@ public class ArticleService {
         Article article = Article.builder()
                 .title(request.title())
                 .content(request.content())
-                .filePath(request.filePath())
                 .user(user)
                 .isDeleted(false)
                 .build();
@@ -57,7 +56,7 @@ public class ArticleService {
         validateDeleteArticle(findArticle);
         validateArticleAuthor(user, findArticle);
 
-        findArticle.update(request.title(), request.content(), request.filePath());
+        findArticle.update(request.title(), request.content());
         Article updateArticle = articleRepository.save(findArticle);
 
         return UpdateArticleResponse.of(updateArticle);

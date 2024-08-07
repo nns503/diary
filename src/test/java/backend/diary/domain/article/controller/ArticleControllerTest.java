@@ -50,11 +50,11 @@ class ArticleControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 게시글을_작성한다_성공_USER() throws Exception {
-        CreateArticleRequest createArticleRequest = new CreateArticleRequest(article1.getTitle(), article1.getContent(), article1.getFilePath());
+        CreateArticleRequest createArticleRequest = new CreateArticleRequest(article1.getTitle(), article1.getContent());
         String request  = objectMapper.writeValueAsString(createArticleRequest);
 
         given(articleService.createArticle(any(User.class), any(CreateArticleRequest.class)))
-                .willReturn(new CreateArticleResponse(article1.getId(), article1.getTitle(), article1.getContent(), article1.getFilePath()));
+                .willReturn(new CreateArticleResponse(article1.getId(), article1.getTitle(), article1.getContent()));
 
         ResultActions resultActions = mvc.perform(post("/api/article")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -63,13 +63,12 @@ class ArticleControllerTest extends ControllerTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.articleId").value(article1.getId()))
                 .andExpect(jsonPath("$.title").value(article1.getTitle()))
-                .andExpect(jsonPath("$.content").value(article1.getContent()))
-                .andExpect(jsonPath("$.filePath").value(article1.getFilePath()));
+                .andExpect(jsonPath("$.content").value(article1.getContent()));
     }
 
     @Test
     void 게시글을_작성한다_실패_인증받지_못한_회원() throws Exception {
-        CreateArticleRequest createArticleRequest = new CreateArticleRequest(article1.getTitle(), article1.getContent(), article1.getFilePath());
+        CreateArticleRequest createArticleRequest = new CreateArticleRequest(article1.getTitle(), article1.getContent());
         String request  = objectMapper.writeValueAsString(createArticleRequest);
 
         ResultActions resultActions = mvc.perform(post("/api/article")
@@ -82,7 +81,7 @@ class ArticleControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 게시글을_작성한다_실패_잘못된_제목_내용없음() throws Exception {
-        CreateArticleRequest createArticleRequest = new CreateArticleRequest("", article1.getContent(), article1.getFilePath());
+        CreateArticleRequest createArticleRequest = new CreateArticleRequest("", article1.getContent());
         String request  = objectMapper.writeValueAsString(createArticleRequest);
 
         ResultActions resultActions = mvc.perform(post("/api/article")
@@ -95,7 +94,7 @@ class ArticleControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 게시글을_작성한다_실패_잘못된_제목_NULL() throws Exception {
-        CreateArticleRequest createArticleRequest = new CreateArticleRequest(null, article1.getContent(), article1.getFilePath());
+        CreateArticleRequest createArticleRequest = new CreateArticleRequest(null, article1.getContent());
         String request  = objectMapper.writeValueAsString(createArticleRequest);
 
         ResultActions resultActions = mvc.perform(post("/api/article")
@@ -109,7 +108,7 @@ class ArticleControllerTest extends ControllerTest {
     @WithMockCustomUser
     void 게시글을_작성한다_실패_잘못된_제목_너무김() throws Exception {
         String LongTitle = "준비가 안됐다구요 소용돌이쳐 어지럽다구 쏟아지는 맘을 멈출 수가 없을까? 너의 작은 인사 한마디에 요란해져서 네 맘의 비밀번호 눌러 열고 싶지만 너를 고민고민해도 좋은 걸 어쩌니";
-        CreateArticleRequest createArticleRequest = new CreateArticleRequest(LongTitle, article1.getContent(), article1.getFilePath());
+        CreateArticleRequest createArticleRequest = new CreateArticleRequest(LongTitle, article1.getContent());
         String request  = objectMapper.writeValueAsString(createArticleRequest);
 
         ResultActions resultActions = mvc.perform(post("/api/article")
@@ -150,11 +149,11 @@ class ArticleControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 게시글을_수정한다_성공_USER() throws Exception {
-        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(article1.getTitle(), article1.getContent(), article1.getFilePath());
+        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(article1.getTitle(), article1.getContent());
         String request  = objectMapper.writeValueAsString(updateArticleRequest);
 
         given(articleService.updateArticle(any(User.class), anyLong(), any(UpdateArticleRequest.class)))
-                .willReturn(new UpdateArticleResponse(article1.getId(), article1.getTitle(), article1.getContent(), article1.getFilePath()));
+                .willReturn(new UpdateArticleResponse(article1.getId(), article1.getTitle(), article1.getContent()));
 
         ResultActions resultActions = mvc.perform(put("/api/article/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -163,13 +162,12 @@ class ArticleControllerTest extends ControllerTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.articleId").value(article1.getId()))
                 .andExpect(jsonPath("$.title").value(article1.getTitle()))
-                .andExpect(jsonPath("$.content").value(article1.getContent()))
-                .andExpect(jsonPath("$.filePath").value(article1.getFilePath()));
+                .andExpect(jsonPath("$.content").value(article1.getContent()));
     }
 
     @Test
     void 게시글을_수정한다_실패_인증받지_못한_회원() throws Exception {
-        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(article1.getTitle(), article1.getContent(), article1.getFilePath());
+        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(article1.getTitle(), article1.getContent());
         String request  = objectMapper.writeValueAsString(updateArticleRequest);
 
         ResultActions resultActions = mvc.perform(put("/api/article/1")
@@ -182,7 +180,7 @@ class ArticleControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 게시글을_수정한다_실패_잘못된_내용_내용없음() throws Exception {
-        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(article1.getTitle(), "", article1.getFilePath());
+        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(article1.getTitle(), "");
         String request  = objectMapper.writeValueAsString(updateArticleRequest);
 
         ResultActions resultActions = mvc.perform(put("/api/article/1")
@@ -195,7 +193,7 @@ class ArticleControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 게시글을_수정한다_실패_잘못된_내용_NULL() throws Exception {
-        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(article1.getTitle(), null, article1.getFilePath());
+        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(article1.getTitle(), null);
         String request  = objectMapper.writeValueAsString(updateArticleRequest);
 
         ResultActions resultActions = mvc.perform(put("/api/article/1")

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class GetArticleController {
 
     @GetMapping
     public ResponseEntity<GetArticleListResponse> getArticleList(
-            @RequestBody GetArticleListRequest getArticleListRequest
+            @Validated @RequestBody GetArticleListRequest getArticleListRequest
     ){
         Pageable pageable = PageRequest.of(getArticleListRequest.page()-1, getArticleListRequest.size());
         GetArticleListResponse response = getArticleService.getArticleList(pageable);

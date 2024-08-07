@@ -2,7 +2,7 @@ package backend.diary.domain.comment.service;
 
 import backend.diary.domain.article.entity.Article;
 import backend.diary.domain.article.entity.repository.ArticleRepository;
-import backend.diary.domain.article.exception.ArticleAlreadyDeletedException;
+import backend.diary.domain.article.exception.AlreadyDeletedArticleException;
 import backend.diary.domain.article.exception.NotFoundArticleException;
 import backend.diary.domain.article.fixture.ArticleFixture;
 import backend.diary.domain.comment.dto.request.CreateCommentRequest;
@@ -11,7 +11,7 @@ import backend.diary.domain.comment.dto.response.CreateCommentResponse;
 import backend.diary.domain.comment.dto.response.UpdateCommentResponse;
 import backend.diary.domain.comment.entity.Comment;
 import backend.diary.domain.comment.entity.repository.CommentRepository;
-import backend.diary.domain.comment.exception.CommentAlreadyDeletedException;
+import backend.diary.domain.comment.exception.AlreadyDeletedCommentException;
 import backend.diary.domain.comment.exception.NotFoundCommentException;
 import backend.diary.domain.comment.exception.UnauthorizedCommentException;
 import backend.diary.domain.comment.fixture.CommentFixture;
@@ -119,7 +119,7 @@ class CommentServiceTest {
                 .willReturn(Optional.ofNullable(article1));
         article1.delete();
 
-        assertThrows(ArticleAlreadyDeletedException.class,
+        assertThrows(AlreadyDeletedArticleException.class,
                 () ->
                         commentService
                                 .createComment(request, article1.getId(), user_일반회원1.getId()));
@@ -153,7 +153,7 @@ class CommentServiceTest {
 
         comment1.delete();
 
-        assertThrows(CommentAlreadyDeletedException.class,
+        assertThrows(AlreadyDeletedCommentException.class,
                 () ->
                         commentService
                                 .deleteComment(comment1.getId(), user_일반회원1.getId()));
@@ -204,7 +204,7 @@ class CommentServiceTest {
                 .willReturn(Optional.ofNullable(comment1));
         comment1.delete();
 
-        assertThrows(CommentAlreadyDeletedException.class,
+        assertThrows(AlreadyDeletedCommentException.class,
                 () ->
                         commentService
                                 .updateComment(request, comment1.getId(), user_일반회원1.getId()));

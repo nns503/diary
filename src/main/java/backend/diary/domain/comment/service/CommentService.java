@@ -2,7 +2,7 @@ package backend.diary.domain.comment.service;
 
 import backend.diary.domain.article.entity.Article;
 import backend.diary.domain.article.entity.repository.ArticleRepository;
-import backend.diary.domain.article.exception.ArticleAlreadyDeletedException;
+import backend.diary.domain.article.exception.AlreadyDeletedArticleException;
 import backend.diary.domain.article.exception.NotFoundArticleException;
 import backend.diary.domain.comment.dto.request.CreateCommentRequest;
 import backend.diary.domain.comment.dto.request.UpdateCommentRequest;
@@ -10,7 +10,7 @@ import backend.diary.domain.comment.dto.response.CreateCommentResponse;
 import backend.diary.domain.comment.dto.response.UpdateCommentResponse;
 import backend.diary.domain.comment.entity.Comment;
 import backend.diary.domain.comment.entity.repository.CommentRepository;
-import backend.diary.domain.comment.exception.CommentAlreadyDeletedException;
+import backend.diary.domain.comment.exception.AlreadyDeletedCommentException;
 import backend.diary.domain.comment.exception.NotFoundCommentException;
 import backend.diary.domain.comment.exception.UnauthorizedCommentException;
 import backend.diary.domain.user.entity.User;
@@ -80,7 +80,7 @@ public class CommentService {
 
     private void validateDeleteComment(Article findArticle) {
         if(findArticle.getIsDeleted()){
-            throw new ArticleAlreadyDeletedException();
+            throw new AlreadyDeletedArticleException();
         }
     }
 
@@ -92,7 +92,7 @@ public class CommentService {
 
     private void validateDeleteComment(Comment findComment) {
         if(findComment.getIsDeleted()){
-            throw new CommentAlreadyDeletedException();
+            throw new AlreadyDeletedCommentException();
         }
     }
 }

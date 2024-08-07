@@ -2,23 +2,23 @@ package backend.diary.domain.comment.exception;
 
 import backend.diary.global.exception.BadRequestException;
 
-public class CommentAlreadyDeletedException extends BadRequestException {
+public class AlreadyDeletedCommentException extends BadRequestException {
 
     private static final String DEFAULT_MESSAGE = "이미 삭제된 댓글입니다.";
 
-    public CommentAlreadyDeletedException() {
+    public AlreadyDeletedCommentException() {
         super(DEFAULT_MESSAGE);
     }
 
-    public CommentAlreadyDeletedException(String message) {
+    public AlreadyDeletedCommentException(String message) {
         super(message);
     }
 
-    public CommentAlreadyDeletedException(Throwable cause) {
+    public AlreadyDeletedCommentException(Throwable cause) {
         super(cause);
     }
 
-    public CommentAlreadyDeletedException(String message, Throwable cause) {
+    public AlreadyDeletedCommentException(String message, Throwable cause) {
         super(message, cause);
     }
 }

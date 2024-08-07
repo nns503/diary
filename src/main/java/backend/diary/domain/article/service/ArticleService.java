@@ -6,7 +6,7 @@ import backend.diary.domain.article.dto.response.CreateArticleResponse;
 import backend.diary.domain.article.dto.response.UpdateArticleResponse;
 import backend.diary.domain.article.entity.Article;
 import backend.diary.domain.article.entity.repository.ArticleRepository;
-import backend.diary.domain.article.exception.ArticleAlreadyDeletedException;
+import backend.diary.domain.article.exception.AlreadyDeletedArticleException;
 import backend.diary.domain.article.exception.NotFoundArticleException;
 import backend.diary.domain.article.exception.UnauthorizedArticleException;
 import backend.diary.domain.user.entity.User;
@@ -79,7 +79,7 @@ public class ArticleService {
 
     private void validateDeleteArticle(Article findArticle) {
         if(findArticle.getIsDeleted()){
-            throw new ArticleAlreadyDeletedException();
+            throw new AlreadyDeletedArticleException();
         }
     }
 }

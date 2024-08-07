@@ -1,7 +1,7 @@
 package backend.diary.global.auth.service;
 
-import backend.diary.domain.user.entity.User;
 import backend.diary.domain.user.entity.CustomUserDetails;
+import backend.diary.domain.user.entity.User;
 import backend.diary.domain.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

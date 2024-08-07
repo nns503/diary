@@ -6,7 +6,7 @@ import backend.diary.domain.article.dto.request.UpdateArticleRequest;
 import backend.diary.domain.article.dto.response.UpdateArticleResponse;
 import backend.diary.domain.article.entity.Article;
 import backend.diary.domain.article.entity.repository.ArticleRepository;
-import backend.diary.domain.article.exception.ArticleAlreadyDeletedException;
+import backend.diary.domain.article.exception.AlreadyDeletedArticleException;
 import backend.diary.domain.article.exception.NotFoundArticleException;
 import backend.diary.domain.article.exception.UnauthorizedArticleException;
 import backend.diary.domain.article.fixture.ArticleFixture;
@@ -91,7 +91,7 @@ class ArticleServiceTest {
         article1.delete();
         given(articleRepository.findById(article1.getId())).willReturn(Optional.ofNullable(article1));
 
-        assertThrows(ArticleAlreadyDeletedException.class,
+        assertThrows(AlreadyDeletedArticleException.class,
                 ()->
                         articleService.deleteArticle(article1.getId(), user_일반회원1.getId()));
     }
@@ -135,7 +135,7 @@ class ArticleServiceTest {
         UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest("수정된 제목", "수정된 내용", "수정된 주소");
         given(articleRepository.findById(article1.getId())).willReturn(Optional.ofNullable(article1));
 
-        assertThrows(ArticleAlreadyDeletedException.class,
+        assertThrows(AlreadyDeletedArticleException.class,
                 ()->
                         articleService.updateArticle(article1.getId(), updateArticleRequest, user_일반회원1.getId()));
     }

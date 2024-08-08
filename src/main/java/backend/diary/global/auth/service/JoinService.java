@@ -22,8 +22,8 @@ public class JoinService {
         String password = joinRequest.password();
         String nickname = joinRequest.nickname();
 
-        CheckDuplicationUsername(username);
-        CheckDuplicationNickname(nickname);
+        checkDuplicationUsername(username);
+        checkDuplicationNickname(nickname);
 
         User user = User.builder()
                 .username(username)
@@ -35,13 +35,13 @@ public class JoinService {
         userRepository.save(user);
     }
 
-    private void CheckDuplicationUsername(String username) {
+    private void checkDuplicationUsername(String username) {
         if(userRepository.existsByUsername(username)){
             throw new DuplicationUsernameException();
         }
     }
 
-    private void CheckDuplicationNickname(String nickname) {
+    private void checkDuplicationNickname(String nickname) {
         if(userRepository.existsByNickname(nickname)){
             throw new DuplicationNicknameException();
         }

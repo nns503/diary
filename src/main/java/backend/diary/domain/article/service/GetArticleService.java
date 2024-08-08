@@ -24,10 +24,11 @@ public class GetArticleService {
         return GetArticleListResponse.of(articles);
     }
 
+    @Transactional
     public GetArticleDetailResponse getArticle(Long articleId) {
         Article findArticle = articleRepository.findById(articleId)
                 .orElseThrow(NotFoundArticleException::new);
-
+        articleRepository.increaseViewCount(articleId);
         return GetArticleDetailResponse.of(findArticle);
     }
 }

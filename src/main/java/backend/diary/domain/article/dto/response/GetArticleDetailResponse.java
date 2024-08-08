@@ -8,6 +8,7 @@ public record GetArticleDetailResponse(
         String title,
         String author,
         int likeCount,
+        int viewCount,
         String content,
         LocalDateTime createAt
 ){
@@ -16,6 +17,7 @@ public record GetArticleDetailResponse(
                 article.getTitle(),
                 article.getUser().getNickname(),
                 article.getLikeCount(),
+                article.getViewCount(),
                 article.getContent(),
                 article.getCreatedAt()
         );

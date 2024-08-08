@@ -1,8 +1,8 @@
 package backend.diary.domain.article.service;
 
+import backend.diary.domain.article.dto.response.GetArticleDTO;
 import backend.diary.domain.article.dto.response.GetArticleDetailResponse;
 import backend.diary.domain.article.dto.response.GetArticleListResponse;
-import backend.diary.domain.article.dto.response.GetArticleDTO;
 import backend.diary.domain.article.entity.Article;
 import backend.diary.domain.article.entity.repository.ArticleRepository;
 import backend.diary.domain.article.exception.NotFoundArticleException;
@@ -32,8 +32,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -102,6 +101,27 @@ class GetArticleServiceTest {
         GetArticleDetailResponse getArticleResponse = getArticleService.getArticle(articleId);
 
         assertThat(getArticleResponse.title()).isEqualTo(article1.getTitle());
+        assertThat(getArticleResponse.content()).isEqualTo(article1.getContent());
+        assertThat(getArticleResponse.author()).isEqualTo(article1.getUser().getNickname());
+        assertThat(getArticleResponse.createAt()).isEqualTo(article1.getCreatedAt());
+    }
+
+    @Test
+    void 단일_게시글_연속_조회_조회수_변경_성공() {
+        Long articleId = article1.getId();
+
+        given(articleRepository.findById(articleId))
+                .willReturn(Optional.ofNullable(article1));
+        willAnswer(invocation ->{
+                article1.viewCountPlus();
+                return null;
+    }).given(articleRepository).increaseViewCount(articleId);
+
+        getArticleService.getArticle(articleId);
+        GetArticleDetailResponse getArticleResponse = getArticleService.getArticle(articleId);
+
+        assertThat(getArticleResponse.title()).isEqualTo(article1.getTitle());
+        assertThat(getArticleResponse.viewCount()).isEqualTo(2);
         assertThat(getArticleResponse.content()).isEqualTo(article1.getContent());
         assertThat(getArticleResponse.author()).isEqualTo(article1.getUser().getNickname());
         assertThat(getArticleResponse.createAt()).isEqualTo(article1.getCreatedAt());

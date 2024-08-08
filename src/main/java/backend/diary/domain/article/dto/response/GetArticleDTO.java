@@ -8,16 +8,18 @@ public record GetArticleDTO(
         long id,
         String title,
         String author,
-        String content,
-        LocalDateTime createAt
+        LocalDateTime createAt,
+        int viewCount,
+        int likeCount
 ) {
     public static GetArticleDTO toConvert(Article article) {
         return new GetArticleDTO(
                 article.getId(),
                 article.getTitle(),
                 article.getUser().getNickname(),
-                article.getContent(),
-                article.getCreatedAt()
+                article.getCreatedAt(),
+                article.getViewCount(),
+                article.getLikeCount()
         );
     }
 }

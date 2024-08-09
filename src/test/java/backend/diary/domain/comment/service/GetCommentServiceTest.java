@@ -81,11 +81,11 @@ class GetCommentServiceTest {
         GetCommentListResponse response = getCommentService.getCommentList(article1.getId(), pageable);
         int expectedSize = (totalElements > start) ? Math.min(pageable.getPageSize(), totalElements - start) : 0;
 
-        assertThat(response.page()).isEqualTo(pageable.getPageNumber() + 1);
-        assertThat(response.pageSize()).isEqualTo(pageable.getPageSize());
-        assertThat(response.elements()).isEqualTo(expectedSize);
-        assertThat(response.totalElements()).isEqualTo(comments.size());
-        assertThat(response.totalPages()).isEqualTo((comments.size() + pageable.getPageSize() - 1) / pageable.getPageSize());
+        assertThat(response.pageinfo().page()).isEqualTo(pageable.getPageNumber() + 1);
+        assertThat(response.pageinfo().pageSize()).isEqualTo(pageable.getPageSize());
+        assertThat(response.pageinfo().elements()).isEqualTo(expectedSize);
+        assertThat(response.pageinfo().totalElements()).isEqualTo(comments.size());
+        assertThat(response.pageinfo().totalPages()).isEqualTo((comments.size() + pageable.getPageSize() - 1) / pageable.getPageSize());
 
     }
 

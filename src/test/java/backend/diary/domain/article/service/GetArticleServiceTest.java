@@ -85,11 +85,11 @@ class GetArticleServiceTest {
         for (GetArticleDTO article : articleList.articles()) {
             assertThat(article.id()).isEqualTo(index++);
         }
-        assertThat(articleList.page()).isEqualTo(pageable.getPageNumber() + 1);
-        assertThat(articleList.pageSize()).isEqualTo(pageable.getPageSize());
-        assertThat(articleList.elements()).isEqualTo(expectedSize);
-        assertThat(articleList.totalElements()).isEqualTo(articles.size());
-        assertThat(articleList.totalPages()).isEqualTo((articles.size() + pageable.getPageSize() - 1) / pageable.getPageSize());
+        assertThat(articleList.pageInfo().page()).isEqualTo(pageable.getPageNumber() + 1);
+        assertThat(articleList.pageInfo().pageSize()).isEqualTo(pageable.getPageSize());
+        assertThat(articleList.pageInfo().elements()).isEqualTo(expectedSize);
+        assertThat(articleList.pageInfo().totalElements()).isEqualTo(articles.size());
+        assertThat(articleList.pageInfo().totalPages()).isEqualTo((articles.size() + pageable.getPageSize() - 1) / pageable.getPageSize());
     }
 
     @Test

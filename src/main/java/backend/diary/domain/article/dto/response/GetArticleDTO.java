@@ -12,7 +12,7 @@ public record GetArticleDTO(
         int viewCount,
         int likeCount
 ) {
-    public static GetArticleDTO toConvert(Article article) {
+    public static GetArticleDTO of(Article article) {
         return new GetArticleDTO(
                 article.getId(),
                 article.getTitle(),

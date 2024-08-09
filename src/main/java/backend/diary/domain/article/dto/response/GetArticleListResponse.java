@@ -12,7 +12,7 @@ public record GetArticleListResponse(
 ) {
     public static GetArticleListResponse of(Page<Article> articles){
         List<GetArticleDTO> articleResponseList = articles.getContent().stream()
-                .map(GetArticleDTO::toConvert)
+                .map(GetArticleDTO::of)
                 .toList();
 
         PageInfo pageInfo = PageInfo.of(articles);

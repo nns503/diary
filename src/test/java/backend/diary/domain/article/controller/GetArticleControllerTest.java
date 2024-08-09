@@ -3,8 +3,10 @@ package backend.diary.domain.article.controller;
 import backend.diary.annotation.WithMockCustomUser;
 import backend.diary.common.ControllerTest;
 import backend.diary.domain.article.dto.request.GetArticleListRequest;
+import backend.diary.domain.article.dto.response.GetArticleDetailResponse;
 import backend.diary.domain.article.dto.response.GetArticleListResponse;
 import backend.diary.domain.article.entity.Article;
+import backend.diary.domain.article.fixture.ArticleFixture;
 import backend.diary.domain.article.service.GetArticleService;
 import backend.diary.fixture.CommonUserFixture;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -20,15 +22,16 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -40,6 +43,7 @@ class GetArticleControllerTest extends ControllerTest {
     private GetArticleService getArticleService;
 
     private final CommonUserFixture commonUserFixture = new CommonUserFixture();
+    private final ArticleFixture articleFixture = new ArticleFixture();
 
     @ParameterizedTest()
     @MethodSource("provideGetArticleListRequestParameters")
@@ -65,17 +69,27 @@ class GetArticleControllerTest extends ControllerTest {
         given(getArticleService.getArticleList(any(Pageable.class)))
                 .willReturn(getArticleListResponse);
 
-        ResultActions resultActions = mvc.perform(get("/api/article")
+        mvc.perform(get("/api/article")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request));
-
-        resultActions.andExpect(status().isOk());
+                .content(request))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
     @WithMockCustomUser
-    void 단일_게시글을_조회한다_성공_USER(){
+    void 단일_게시글을_조회한다_성공_USER() throws Exception {
+        Long articleId = 1L;
+        String request = objectMapper.writeValueAsString(articleId);
+        GetArticleDetailResponse response = GetArticleDetailResponse.of(articleFixture.기본게시물1(commonUserFixture.일반회원1));
+        given(getArticleService.getArticle(anyLong()))
+                .willReturn(response);
 
+        mvc.perform(get("/api/article/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     static Stream<Arguments> provideGetArticleListRequestParameters() {

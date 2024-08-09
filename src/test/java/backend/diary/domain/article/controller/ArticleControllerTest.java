@@ -19,13 +19,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -56,14 +56,15 @@ class ArticleControllerTest extends ControllerTest {
         given(articleService.createArticle(any(User.class), any(CreateArticleRequest.class)))
                 .willReturn(new CreateArticleResponse(article1.getId(), article1.getTitle(), article1.getContent()));
 
-        ResultActions resultActions = mvc.perform(post("/api/article")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(request));
-
-        resultActions.andExpect(status().isOk())
+        mvc.perform(post("/api/article")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.articleId").value(article1.getId()))
                 .andExpect(jsonPath("$.title").value(article1.getTitle()))
                 .andExpect(jsonPath("$.content").value(article1.getContent()));
+
     }
 
     @Test
@@ -71,11 +72,11 @@ class ArticleControllerTest extends ControllerTest {
         CreateArticleRequest createArticleRequest = new CreateArticleRequest(article1.getTitle(), article1.getContent());
         String request  = objectMapper.writeValueAsString(createArticleRequest);
 
-        ResultActions resultActions = mvc.perform(post("/api/article")
+        mvc.perform(post("/api/article")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request));
-
-        resultActions.andExpect(status().isUnauthorized());
+                .content(request))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -84,11 +85,11 @@ class ArticleControllerTest extends ControllerTest {
         CreateArticleRequest createArticleRequest = new CreateArticleRequest("", article1.getContent());
         String request  = objectMapper.writeValueAsString(createArticleRequest);
 
-        ResultActions resultActions = mvc.perform(post("/api/article")
+        mvc.perform(post("/api/article")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request));
-
-        resultActions.andExpect(status().isBadRequest());
+                .content(request))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -97,11 +98,12 @@ class ArticleControllerTest extends ControllerTest {
         CreateArticleRequest createArticleRequest = new CreateArticleRequest(null, article1.getContent());
         String request  = objectMapper.writeValueAsString(createArticleRequest);
 
-        ResultActions resultActions = mvc.perform(post("/api/article")
+        mvc.perform(post("/api/article")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request));
+                .content(request))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
 
-        resultActions.andExpect(status().isBadRequest());
     }
 
     @Test
@@ -111,11 +113,11 @@ class ArticleControllerTest extends ControllerTest {
         CreateArticleRequest createArticleRequest = new CreateArticleRequest(LongTitle, article1.getContent());
         String request  = objectMapper.writeValueAsString(createArticleRequest);
 
-        ResultActions resultActions = mvc.perform(post("/api/article")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(request));
-
-        resultActions.andExpect(status().isBadRequest());
+        mvc.perform(post("/api/article")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                        .andDo(print())
+                        .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -126,11 +128,11 @@ class ArticleControllerTest extends ControllerTest {
 
         willDoNothing().given(articleService).deleteArticle(any(User.class), anyLong());
 
-        ResultActions resultActions = mvc.perform(delete("/api/article/1")
+        mvc.perform(delete("/api/article/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request));
-
-        resultActions.andExpect(status().isOk())
+                .content(request))
+                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(content().string("게시글을 삭제했습니다."));
     }
 
@@ -139,11 +141,11 @@ class ArticleControllerTest extends ControllerTest {
         DeleteArticleRequest deleteArticleRequest = new DeleteArticleRequest(article1.getId());
         String request  = objectMapper.writeValueAsString(deleteArticleRequest);
 
-        ResultActions resultActions = mvc.perform(delete("/api/article/1")
+        mvc.perform(delete("/api/article/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request));
-
-        resultActions.andExpect(status().isUnauthorized());
+                .content(request))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -155,11 +157,11 @@ class ArticleControllerTest extends ControllerTest {
         given(articleService.updateArticle(any(User.class), anyLong(), any(UpdateArticleRequest.class)))
                 .willReturn(new UpdateArticleResponse(article1.getId(), article1.getTitle(), article1.getContent()));
 
-        ResultActions resultActions = mvc.perform(put("/api/article/1")
+        mvc.perform(put("/api/article/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request));
-
-        resultActions.andExpect(status().isOk())
+                .content(request))
+                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.articleId").value(article1.getId()))
                 .andExpect(jsonPath("$.title").value(article1.getTitle()))
                 .andExpect(jsonPath("$.content").value(article1.getContent()));
@@ -170,11 +172,11 @@ class ArticleControllerTest extends ControllerTest {
         UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(article1.getTitle(), article1.getContent());
         String request  = objectMapper.writeValueAsString(updateArticleRequest);
 
-        ResultActions resultActions = mvc.perform(put("/api/article/1")
+        mvc.perform(put("/api/article/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request));
-
-        resultActions.andExpect(status().isUnauthorized());
+                .content(request))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -183,11 +185,11 @@ class ArticleControllerTest extends ControllerTest {
         UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(article1.getTitle(), "");
         String request  = objectMapper.writeValueAsString(updateArticleRequest);
 
-        ResultActions resultActions = mvc.perform(put("/api/article/1")
+        mvc.perform(put("/api/article/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request));
-
-        resultActions.andExpect(status().isBadRequest());
+                .content(request))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -196,10 +198,10 @@ class ArticleControllerTest extends ControllerTest {
         UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(article1.getTitle(), null);
         String request  = objectMapper.writeValueAsString(updateArticleRequest);
 
-        ResultActions resultActions = mvc.perform(put("/api/article/1")
+        mvc.perform(put("/api/article/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request));
-
-        resultActions.andExpect(status().isBadRequest());
+                .content(request))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }

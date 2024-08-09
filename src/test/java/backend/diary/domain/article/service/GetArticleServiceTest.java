@@ -1,6 +1,5 @@
 package backend.diary.domain.article.service;
 
-import backend.diary.domain.article.dto.response.GetArticleDTO;
 import backend.diary.domain.article.dto.response.GetArticleDetailResponse;
 import backend.diary.domain.article.dto.response.GetArticleListResponse;
 import backend.diary.domain.article.entity.Article;
@@ -80,11 +79,6 @@ class GetArticleServiceTest {
         GetArticleListResponse articleList = getArticleService.getArticleList(pageable);
         int expectedSize = (totalElements > start) ? Math.min(pageable.getPageSize(), totalElements - start) : 0;
 
-        long index = start + 1;
-        //정렬 검사, 추후 삭제
-        for (GetArticleDTO article : articleList.articles()) {
-            assertThat(article.id()).isEqualTo(index++);
-        }
         assertThat(articleList.pageInfo().page()).isEqualTo(pageable.getPageNumber() + 1);
         assertThat(articleList.pageInfo().pageSize()).isEqualTo(pageable.getPageSize());
         assertThat(articleList.pageInfo().elements()).isEqualTo(expectedSize);

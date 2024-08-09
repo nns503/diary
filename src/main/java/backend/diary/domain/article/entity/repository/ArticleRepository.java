@@ -13,6 +13,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Boolean existsByIdAndIsDeletedFalse(Long id);
 
+    @Query(value = "select a from Article a where a.isDeleted = false order by a.createdAt desc "
+    ,countQuery = "select count(*) from Article a")
     Page<Article> findAllByIsDeletedFalse(Pageable pageable);
 
     Optional<Article> findByIdAndIsDeletedFalse(Long id);

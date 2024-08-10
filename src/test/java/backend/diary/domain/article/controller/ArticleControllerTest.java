@@ -3,7 +3,6 @@ package backend.diary.domain.article.controller;
 import backend.diary.annotation.WithMockCustomUser;
 import backend.diary.common.ControllerTest;
 import backend.diary.domain.article.dto.request.CreateArticleRequest;
-import backend.diary.domain.article.dto.request.DeleteArticleRequest;
 import backend.diary.domain.article.dto.request.UpdateArticleRequest;
 import backend.diary.domain.article.dto.response.CreateArticleResponse;
 import backend.diary.domain.article.dto.response.UpdateArticleResponse;
@@ -123,14 +122,9 @@ class ArticleControllerTest extends ControllerTest {
     @Test
     @WithMockCustomUser
     void 게시글을_삭제한다_성공_USER() throws Exception {
-        DeleteArticleRequest deleteArticleRequest = new DeleteArticleRequest(article1.getId());
-        String request  = objectMapper.writeValueAsString(deleteArticleRequest);
-
         willDoNothing().given(articleService).deleteArticle(any(User.class), anyLong());
 
-        mvc.perform(delete("/api/article/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(request))
+        mvc.perform(delete("/api/article/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("게시글을 삭제했습니다."));
@@ -138,12 +132,7 @@ class ArticleControllerTest extends ControllerTest {
 
     @Test
     void 게시글을_삭제한다_실패_인증받지_못한_회원() throws Exception {
-        DeleteArticleRequest deleteArticleRequest = new DeleteArticleRequest(article1.getId());
-        String request  = objectMapper.writeValueAsString(deleteArticleRequest);
-
-        mvc.perform(delete("/api/article/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(request))
+        mvc.perform(delete("/api/article/1"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }

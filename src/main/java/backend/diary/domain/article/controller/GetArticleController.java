@@ -1,9 +1,9 @@
 package backend.diary.domain.article.controller;
 
-import backend.diary.domain.article.dto.request.GetArticleListRequest;
 import backend.diary.domain.article.dto.response.GetArticleDetailResponse;
 import backend.diary.domain.article.dto.response.GetArticleListResponse;
 import backend.diary.domain.article.service.GetArticleService;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
+@Validated
 @RestController
 @RequestMapping("/api/article")
 public class GetArticleController {
@@ -20,9 +21,12 @@ public class GetArticleController {
 
     @GetMapping
     public ResponseEntity<GetArticleListResponse> getArticleList(
-            @Validated @RequestBody GetArticleListRequest getArticleListRequest
+            @RequestParam(defaultValue = "1") @Min(value = 1, message = "페이지 번호는 1 이상이어야 합니다.")
+            int page,
+            @RequestParam(defaultValue = "10")  @Min(value = 1, message = "페이지 사이즈는 1 이상이어야 합니다.")
+            int size
     ){
-        Pageable pageable = PageRequest.of(getArticleListRequest.page()-1, getArticleListRequest.size());
+        Pageable pageable = PageRequest.of(page-1, size);
         GetArticleListResponse response = getArticleService.getArticleList(pageable);
         return ResponseEntity.ok(response);
     }

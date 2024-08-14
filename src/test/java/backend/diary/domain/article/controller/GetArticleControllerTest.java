@@ -2,7 +2,6 @@ package backend.diary.domain.article.controller;
 
 import backend.diary.annotation.WithMockCustomUser;
 import backend.diary.common.ControllerTest;
-import backend.diary.domain.article.dto.request.GetArticleListRequest;
 import backend.diary.domain.article.dto.response.GetArticleDetailResponse;
 import backend.diary.domain.article.dto.response.GetArticleListResponse;
 import backend.diary.domain.article.entity.Article;
@@ -49,8 +48,6 @@ class GetArticleControllerTest extends ControllerTest {
     @MethodSource("provideGetArticleListRequestParameters")
     @WithMockCustomUser
     void 게시글_목록을_조회한다_성공_USER(int page, int size) throws Exception {
-        GetArticleListRequest getArticleListRequest = new GetArticleListRequest(page, size);
-        String request = objectMapper.writeValueAsString(getArticleListRequest);
         PageRequest pageable = PageRequest.of(page, size);
         List<Article> articles = new ArrayList<>();
         for(long i=1; i<=33; i++){
@@ -70,8 +67,9 @@ class GetArticleControllerTest extends ControllerTest {
                 .willReturn(getArticleListResponse);
 
         mvc.perform(get("/api/article")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(request))
+                        .param("page", String.valueOf(page))
+                        .param("size", String.valueOf(size))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

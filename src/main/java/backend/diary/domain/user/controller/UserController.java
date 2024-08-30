@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +19,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PutMapping
+    @PatchMapping
     public ResponseEntity<String> updateNickname(
             @Validated @RequestBody UpdateNicknameRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails

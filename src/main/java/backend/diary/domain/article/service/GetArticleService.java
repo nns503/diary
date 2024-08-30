@@ -1,5 +1,6 @@
 package backend.diary.domain.article.service;
 
+import backend.diary.domain.article.dto.response.GetArticleDTO;
 import backend.diary.domain.article.dto.response.GetArticleDetailResponse;
 import backend.diary.domain.article.dto.response.GetArticleListResponse;
 import backend.diary.domain.article.entity.Article;
@@ -18,8 +19,8 @@ public class GetArticleService {
 
     private final ArticleRepository articleRepository;
 
-    public GetArticleListResponse getArticleList(Pageable pageable){
-        Page<Article> articles = articleRepository.findAllByIsDeletedFalse(pageable);
+    public GetArticleListResponse getArticleList(Pageable pageable, String keywordType, String keyword, String sort){
+        Page<GetArticleDTO> articles = articleRepository.findByArticleList(pageable, keywordType, keyword, sort);
 
         return GetArticleListResponse.of(articles);
     }

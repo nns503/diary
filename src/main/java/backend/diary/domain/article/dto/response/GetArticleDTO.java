@@ -1,6 +1,6 @@
 package backend.diary.domain.article.dto.response;
 
-import backend.diary.domain.article.entity.Article;
+import com.querydsl.core.annotations.QueryProjection;
 
 import java.time.LocalDateTime;
 
@@ -12,14 +12,14 @@ public record GetArticleDTO(
         int viewCount,
         int likeCount
 ) {
-    public static GetArticleDTO of(Article article) {
-        return new GetArticleDTO(
-                article.getId(),
-                article.getTitle(),
-                article.getUser().getNickname(),
-                article.getCreatedAt(),
-                article.getViewCount(),
-                article.getLikeCount()
-        );
+
+    @QueryProjection
+    public GetArticleDTO(long id, String title, String author, LocalDateTime createAt, int viewCount, int likeCount) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.createAt = createAt;
+        this.viewCount = viewCount;
+        this.likeCount = likeCount;
     }
 }

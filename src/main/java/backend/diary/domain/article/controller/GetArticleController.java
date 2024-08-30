@@ -11,8 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RequiredArgsConstructor
 @Validated
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/article")
 public class GetArticleController {
@@ -21,13 +21,19 @@ public class GetArticleController {
 
     @GetMapping
     public ResponseEntity<GetArticleListResponse> getArticleList(
-            @RequestParam(defaultValue = "1") @Min(value = 1, message = "페이지 번호는 1 이상이어야 합니다.")
+            @RequestParam(name = "page", defaultValue = "1") @Min(value = 1, message = "페이지 번호는 1 이상이어야 합니다.")
             int page,
-            @RequestParam(defaultValue = "10")  @Min(value = 1, message = "페이지 사이즈는 1 이상이어야 합니다.")
-            int size
+            @RequestParam(name = "size", defaultValue = "10")  @Min(value = 1, message = "페이지 사이즈는 1 이상이어야 합니다.")
+            int size,
+            @RequestParam(name = "keywordType", required = false)
+            String keywordType,
+            @RequestParam(name = "keyword", required = false)
+            String keyword,
+            @RequestParam(name = "sort", required = false)
+            String sort
     ){
         Pageable pageable = PageRequest.of(page-1, size);
-        GetArticleListResponse response = getArticleService.getArticleList(pageable);
+        GetArticleListResponse response = getArticleService.getArticleList(pageable, keywordType, keyword, sort);
         return ResponseEntity.ok(response);
     }
 

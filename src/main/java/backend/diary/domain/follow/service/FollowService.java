@@ -54,8 +54,8 @@ public class FollowService {
         followRepository.delete(follow);
     }
 
-    private void validateSelfFollow(Long user, Long followingId) {
-        if (user.equals(followingId)) {
+    private void validateSelfFollow(Long userId, Long followingId) {
+        if (userId.equals(followingId)) {
             throw new SelfFollowException();
         }
     }

@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler))
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
-                        .requestMatchers("/", "/login", "/join", "/reissue").permitAll()
+                        .requestMatchers("/", "/login", "/api/join", "/api/reissue", "/api/main").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
 

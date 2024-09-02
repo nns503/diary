@@ -15,7 +15,7 @@ public class JoinController {
 
     private final JoinService joinService;
 
-    @PostMapping("/join")
+    @PostMapping("/api/join")
     public ResponseEntity<String> join(
             @Validated @RequestBody JoinRequest joinRequest
     ) {

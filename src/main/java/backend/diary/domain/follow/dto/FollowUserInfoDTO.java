@@ -1,6 +1,6 @@
 package backend.diary.domain.follow.dto;
 
-public record FollowingInfoDTO(
+public record FollowUserInfoDTO(
         Long userId,
         String nickname,
         boolean isFollow,
